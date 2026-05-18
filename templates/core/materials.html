@@ -1,42 +1,245 @@
 {% extends 'base.html' %}
-{% block title %}Учебные материалы{% endblock %}
+{% load static %}
+
+{% block title %}Методкопилка - Сайт учителя информатики{% endblock %}
+
+{% block extra_css %}
+<style>
+    .material-card {
+        border: none;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        transition: all 0.3s ease;
+        margin-bottom: 20px;
+    }
+    .material-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    }
+    .material-badge {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+    }
+    .download-btn {
+        transition: all 0.3s ease;
+    }
+    .download-btn:hover {
+        transform: scale(1.05);
+    }
+</style>
+{% endblock %}
+
 {% block content %}
-<h1>Материалы</h1>
-
-<form method="get" class="filters">
-    <input type="text" name="q" placeholder="Поиск..." value="{{ request.GET.q }}">
-    <select name="type">
-        <option value="">Все типы</option>
-        <option value="presentation" {% if request.GET.type == 'presentation' %}selected{% endif %}>Презентации</option>
-        <option value="notes" {% if request.GET.type == 'notes' %}selected{% endif %}>Конспекты</option>
-        <option value="video" {% if request.GET.type == 'video' %}selected{% endif %}>Видео</option>
-        <option value="task" {% if request.GET.type == 'task' %}selected{% endif %}>Практика</option>
-    </select>
-    <button type="submit" class="btn">Фильтровать</button>
-</form>
-
-<div class="materials-grid">
-    {% for mat in materials %}
-        <div class="material-card">
-            <span class="badge">{{ mat.get_material_type_display }}</span>
-            <h4>{{ mat.title }}</h4>
-            <p>{{ mat.description|truncatewords:15 }}</p>
-            {% if mat.file %}
-                <a href="{{ mat.file.url }}" class="btn-sm" download>Скачать</a>
-            {% elif mat.external_url %}
-                <a href="{{ mat.external_url }}" class="btn-sm" target="_blank">Перейти</a>
-            {% endif %}
+<div class="container mt-5 pt-4">
+    <h1 class="text-center mb-5">Методкопилка</h1>
+    
+    <div class="row mb-4">
+        <div class="col-md-4 mb-3">
+            <div class="card material-card position-relative">
+                <span class="material-badge badge bg-primary">Презентация</span>
+                <div class="card-body">
+                    <h5 class="card-title">История развития вычислительной техники</h5>
+                    <p class="card-text">Презентация для 7-8 классов об истории компьютеров от абака до современных суперкомпьютеров.</p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <small class="text-muted">15.12.2024 • 7-8 класс</small>
+                        <a href="#" class="btn btn-primary btn-sm download-btn">
+                            <i class="fas fa-download me-1"></i>Скачать
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
-    {% empty %}
-        <p>Материалы не найдены.</p>
-    {% endfor %}
-</div>
+        
+        <div class="col-md-4 mb-3">
+            <div class="card material-card position-relative">
+                <span class="material-badge badge bg-success">Практика</span>
+                <div class="card-body">
+                    <h5 class="card-title">Основы работы в Excel</h5>
+                    <p class="card-text">Практическая работа по созданию таблиц, использованию формул и построению диаграмм.</p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <small class="text-muted">10.12.2024 • 8 класс</small>
+                        <a href="#" class="btn btn-success btn-sm download-btn">
+                            <i class="fas fa-download me-1"></i>Скачать
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mb-3">
+            <div class="card material-card position-relative">
+                <span class="material-badge badge bg-warning text-dark">Тест</span>
+                <div class="card-body">
+                    <h5 class="card-title">Тест по основам алгоритмизации</h5>
+                    <p class="card-text">Контрольный тест для 9 класса по темам "Алгоритмы", "Блок-схемы", "Основные конструкции".</p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <small class="text-muted">05.12.2024 • 9 класс</small>
+                        <a href="#" class="btn btn-warning btn-sm download-btn">
+                            <i class="fas fa-download me-1"></i>Скачать
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-{% if is_paginated %}
-<div class="pagination">
-    {% if page_obj.has_previous %}<a href="?page={{ page_obj.previous_page_number }}&{{ request.GET.urlencode }}">Назад</a>{% endif %}
-    <span>Стр. {{ page_obj.number }}</span>
-    {% if page_obj.has_next %}<a href="?page={{ page_obj.next_page_number }}&{{ request.GET.urlencode }}">Вперёд</a>{% endif %}
+    <div class="row mb-4">
+        <div class="col-md-4 mb-3">
+            <div class="card material-card position-relative">
+                <span class="material-badge badge bg-info">Видео</span>
+                <div class="card-body">
+                    <h5 class="card-title">Создание сайта на HTML и CSS</h5>
+                    <p class="card-text">Видеоурок по созданию простого веб-сайта с нуля. От разметки до стилизации.</p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <small class="text-muted">01.12.2024 • 9-10 класс</small>
+                        <a href="#" class="btn btn-info btn-sm download-btn">
+                            <i class="fas fa-play me-1"></i>Смотреть
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mb-3">
+            <div class="card material-card position-relative">
+                <span class="material-badge badge bg-primary">Презентация</span>
+                <div class="card-body">
+                    <h5 class="card-title">Основы кибербезопасности</h5>
+                    <p class="card-text">Презентация о безопасности в интернете, защите персональных данных и паролей.</p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <small class="text-muted">28.11.2024 • 7-11 класс</small>
+                        <a href="#" class="btn btn-primary btn-sm download-btn">
+                            <i class="fas fa-download me-1"></i>Скачать
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mb-3">
+            <div class="card material-card position-relative">
+                <span class="material-badge badge bg-success">Практика</span>
+                <div class="card-body">
+                    <h5 class="card-title">Первая программа на Python</h5>
+                    <p class="card-text">Пошаговое руководство по установке Python и созданию первой программы "Hello, World!".</p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <small class="text-muted">25.11.2024 • 9 класс</small>
+                        <a href="#" class="btn btn-success btn-sm download-btn">
+                            <i class="fas fa-download me-1"></i>Скачать
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-secondary text-white">
+                    <h5 class="mb-0"><i class="fas fa-filter me-2"></i>Фильтры материалов</h5>
+                </div>
+                <div class="card-body">
+                    <form id="filterForm">
+                        <div class="mb-3">
+                            <label for="classFilter" class="form-label">Класс</label>
+                            <select class="form-select" id="classFilter">
+                                <option value="all">Все классы</option>
+                                <option value="7">7 класс</option>
+                                <option value="8">8 класс</option>
+                                <option value="9">9 класс</option>
+                                <option value="10">10 класс</option>
+                                <option value="11">11 класс</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="typeFilter" class="form-label">Тип материала</label>
+                            <select class="form-select" id="typeFilter">
+                                <option value="all">Все типы</option>
+                                <option value="presentation">Презентации</option>
+                                <option value="practice">Практические работы</option>
+                                <option value="test">Тесты</option>
+                                <option value="video">Видеоуроки</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="subjectFilter" class="form-label">Тема</label>
+                            <select class="form-select" id="subjectFilter">
+                                <option value="all">Все темы</option>
+                                <option value="programming">Программирование</option>
+                                <option value="graphics">Компьютерная графика</option>
+                                <option value="web">Веб-разработка</option>
+                                <option value="security">Кибербезопасность</option>
+                                <option value="basics">Основы информатики</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Применить фильтры</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="fas fa-chart-pie me-2"></i>Статистика материалов</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-6 mb-3">
+                            <div class="p-3 bg-light rounded">
+                                <i class="fas fa-file-powerpoint fa-2x text-primary mb-2"></i>
+                                <h4>12</h4>
+                                <small class="text-muted">Презентаций</small>
+                            </div>
+                        </div>
+                        <div class="col-6 mb-3">
+                            <div class="p-3 bg-light rounded">
+                                <i class="fas fa-file-alt fa-2x text-success mb-2"></i>
+                                <h4>8</h4>
+                                <small class="text-muted">Практических работ</small>
+                            </div>
+                        </div>
+                        <div class="col-6 mb-3">
+                            <div class="p-3 bg-light rounded">
+                                <i class="fas fa-file-signature fa-2x text-warning mb-2"></i>
+                                <h4>15</h4>
+                                <small class="text-muted">Тестов</small>
+                            </div>
+                        </div>
+                        <div class="col-6 mb-3">
+                            <div class="p-3 bg-light rounded">
+                                <i class="fas fa-film fa-2x text-info mb-2"></i>
+                                <h4>6</h4>
+                                <small class="text-muted">Видеоуроков</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="progress mb-2">
+                        <div class="progress-bar bg-primary" style="width: 30%">Презентации 30%</div>
+                        <div class="progress-bar bg-success" style="width: 20%">Практика 20%</div>
+                        <div class="progress-bar bg-warning" style="width: 37%">Тесты 37%</div>
+                        <div class="progress-bar bg-info" style="width: 13%">Видео 13%</div>
+                    </div>
+                    <p class="text-muted small text-center">Всего материалов: 41</p>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-{% endif %}
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Простой фильтр материалов (заглушка для демонстрации)
+    document.getElementById('filterForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const classFilter = document.getElementById('classFilter').value;
+        const typeFilter = document.getElementById('typeFilter').value;
+        const subjectFilter = document.getElementById('subjectFilter').value;
+        
+        alert(`Фильтры применены:\nКласс: ${classFilter}\nТип: ${typeFilter}\nТема: ${subjectFilter}\n\nВ реальном проекте здесь будет AJAX-запрос или перезагрузка страницы с параметрами.`);
+    });
+</script>
 {% endblock %}

@@ -1,41 +1,244 @@
 {% extends 'base.html' %}
 {% block title %}Главная — Сайт учителя информатики{% endblock %}
 {% block content %}
-<section class="hero">
-    <h1>Добро пожаловать на сайт учителя информатики</h1>
-    <p>Здесь вы найдёте материалы, задания и новости по предмету</p>
-</section>
-
-<section class="news-preview">
-    <h2>Последние новости</h2>
-    {% for item in latest_news %}
-        <article class="news-card">
-            <h3><a href="{{ item.get_absolute_url }}">{{ item.title }}</a></h3>
-            <time>{{ item.published_at|date:"d.m.Y" }}</time>
-            <p>{{ item.content|truncatewords:30 }}</p>
-        </article>
-    {% empty %}
-        <p>Новостей пока нет.</p>
-    {% endfor %}
-    <a href="{% url 'core:news_list' %}" class="btn">Все новости</a>
-</section>
-
-<section class="materials-preview">
-    <h2>Рекомендуемые материалы</h2>
-    <div class="materials-grid">
-        {% for mat in featured_materials %}
-            <div class="material-card">
-                <span class="badge">{{ mat.get_material_type_display }}</span>
-                <h4>{{ mat.title }}</h4>
-                {% if mat.file %}
-                    <a href="{{ mat.file.url }}" class="btn-sm" download>Скачать</a>
-                {% elif mat.external_url %}
-                    <a href="{{ mat.external_url }}" class="btn-sm" target="_blank">Перейти</a>
-                {% endif %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h1 class="display-4 fw-bold mb-4 animate-fade-in">Добро пожаловать на сайт учителя информатики</h1>
+                <p class="lead mb-4 animate-slide-up">Иванова Анна Петровна</p>
+                <p class="mb-4 animate-slide-up">Здесь вы найдете полезные материалы, задания и актуальные новости для учащихся и их родителей.</p>
+                <div class="d-flex flex-wrap gap-3 animate-slide-up">
+                    <a href="{% url 'core:about' %}" class="btn btn-light btn-lg">Узнать больше</a>
+                    <button class="btn btn-outline-light btn-lg" data-bs-toggle="modal" data-bs-target="#feedbackModal">
+                        <i class="fas fa-envelope me-2"></i>Написать мне
+                    </button>
+                    <button class="btn btn-success btn-lg" onclick="toggleChat()">
+                        <i class="fas fa-comments me-2"></i>Поддержка
+                    </button>
+                </div>
             </div>
-        {% empty %}
-            <p>Материалы пока не добавлены.</p>
-        {% endfor %}
+            <div class="col-lg-6 text-center">
+                <div class="hero-animation">
+                    <i class="fas fa-laptop-code animate-float"></i>
+                    <div class="code-line" style="--delay: 0"></div>
+                    <div class="code-line" style="--delay: 1"></div>
+                    <div class="code-line" style="--delay: 2"></div>
+                </div>
+            </div>
+        </div>
     </div>
 </section>
+
+<!-- News Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <h2 class="text-center mb-5">Последние новости</h2>
+        <div class="row" id="newsContainer">
+            {% for item in latest_news %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ item.title }}</h5>
+                        <p class="card-text">{{ item.content|truncatewords:20 }}</p>
+                        <small class="text-muted"><i class="far fa-calendar-alt me-1"></i>{{ item.published_at|date:"d.m.Y" }}</small>
+                    </div>
+                    <div class="card-footer bg-transparent border-0">
+                        <a href="{{ item.get_absolute_url }}" class="btn btn-primary">Читать далее</a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12">
+                <p class="text-center">Новостей пока нет.</p>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="text-center mt-4">
+            <a href="{% url 'core:news_list' %}" class="btn btn-primary">
+                <i class="fas fa-newspaper me-2"></i>Все новости
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Quick Links -->
+<section class="py-5">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-md-3 mb-4">
+                <div class="quick-link-card">
+                    <i class="fas fa-book-open fa-3x text-primary mb-3"></i>
+                    <h4>Электронный журнал</h4>
+                    <p>Доступ к оценкам и расписанию</p>
+                    <a href="{% url 'dashboard:student_dashboard' %}" class="btn btn-outline-primary">Перейти</a>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="quick-link-card">
+                    <i class="fas fa-calendar-alt fa-3x text-primary mb-3"></i>
+                    <h4>Расписание уроков</h4>
+                    <p>Актуальное расписание занятий</p>
+                    <a href="{% url 'core:subject' %}" class="btn btn-outline-primary">Посмотреть</a>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="quick-link-card">
+                    <i class="fas fa-download fa-3x text-primary mb-3"></i>
+                    <h4>Методические материалы</h4>
+                    <p>Презентации и практические работы</p>
+                    <a href="{% url 'core:materials' %}" class="btn btn-outline-primary">Скачать</a>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="quick-link-card">
+                    <i class="fas fa-images fa-3x text-primary mb-3"></i>
+                    <h4>Галерея</h4>
+                    <p>Фото и видео с уроков</p>
+                    <a href="{% url 'core:gallery' %}" class="btn btn-outline-primary">Смотреть</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Statistics Section -->
+<section class="py-5 bg-dark text-white">
+    <div class="container">
+        <h2 class="text-center mb-5">Статистика сайта</h2>
+        <div class="row text-center">
+            <div class="col-md-3 mb-4">
+                <div class="counter" data-target="156">0</div>
+                <p>Учеников</p>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="counter" data-target="1247">0</div>
+                <p>Посетителей сегодня</p>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="counter" data-target="41">0</div>
+                <p>Материалов</p>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="counter" data-target="89">0</div>
+                <p>Выполненных проектов</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Upcoming Events -->
+<section class="py-5">
+    <div class="container">
+        <h2 class="text-center mb-5">Ближайшие события</h2>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5>Олимпиада по информатике</h5>
+                        <p>Региональный этап всероссийской олимпиады</p>
+                        <div class="timer" id="timer1">
+                            <div class="timer-item">
+                                <span class="days">00</span>
+                                <small>дней</small>
+                            </div>
+                            <div class="timer-item">
+                                <span class="hours">00</span>
+                                <small>часов</small>
+                            </div>
+                            <div class="timer-item">
+                                <span class="minutes">00</span>
+                                <small>минут</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5>Защита годовых проектов</h5>
+                        <p>Представление IT-проектов учащихся 9-11 классов</p>
+                        <div class="timer" id="timer2">
+                            <div class="timer-item">
+                                <span class="days">00</span>
+                                <small>дней</small>
+                            </div>
+                            <div class="timer-item">
+                                <span class="hours">00</span>
+                                <small>часов</small>
+                            </div>
+                            <div class="timer-item">
+                                <span class="minutes">00</span>
+                                <small>минут</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Инициализация таймеров и счетчиков
+document.addEventListener('DOMContentLoaded', function() {
+    // Таймеры обратного отсчета
+    const eventDates = [
+        { id: 'timer1', date: new Date('2025-06-01') },
+        { id: 'timer2', date: new Date('2025-05-25') }
+    ];
+
+    eventDates.forEach(event => {
+        const timerElement = document.getElementById(event.id);
+        if (timerElement) {
+            updateTimer(timerElement, event.date);
+            setInterval(() => updateTimer(timerElement, event.date), 60000);
+        }
+    });
+
+    // Анимация счетчиков
+    const counters = document.querySelectorAll('.counter');
+    counters.forEach(counter => {
+        const target = +counter.getAttribute('data-target');
+        animateCounter(counter, target);
+    });
+});
+
+function updateTimer(timerElement, targetDate) {
+    const now = new Date();
+    const diff = targetDate - now;
+
+    if (diff <= 0) {
+        timerElement.innerHTML = '<p class="text-danger">Событие началось!</p>';
+        return;
+    }
+
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+
+    timerElement.querySelector('.days').textContent = String(days).padStart(2, '0');
+    timerElement.querySelector('.hours').textContent = String(hours).padStart(2, '0');
+    timerElement.querySelector('.minutes').textContent = String(minutes).padStart(2, '0');
+}
+
+function animateCounter(element, target) {
+    let count = 0;
+    const increment = target / 50;
+    const timer = setInterval(() => {
+        count += increment;
+        if (count >= target) {
+            element.textContent = target;
+            clearInterval(timer);
+        } else {
+            element.textContent = Math.floor(count);
+        }
+    }, 40);
+}
+</script>
 {% endblock %}

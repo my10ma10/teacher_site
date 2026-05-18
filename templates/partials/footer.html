@@ -1,5 +1,55 @@
-<footer class="site-footer">
+<footer class="bg-dark text-light py-4">
     <div class="container">
-        <p>&copy; {% now "Y" %} Сайт учителя информатики</p>
+        <div class="row">
+            <div class="col-md-6">
+                <h5>МБОУ Лицей №8</h5>
+                <p>Учитель информатики - Иванова Анна Петровна</p>
+                <p>Email: teacher@school8.ru</p>
+            </div>
+            <div class="col-md-6 text-end">
+                <div class="social-links">
+                    <a href="#" class="text-light me-3" onclick="shareOnVK()">
+                        <i class="fab fa-vk fa-2x"></i>
+                    </a>
+                    <a href="#" class="text-light me-3" onclick="shareOnTelegram()">
+                        <i class="fab fa-telegram fa-2x"></i>
+                    </a>
+                    <a href="#" class="text-light" onclick="sendEmail()">
+                        <i class="fas fa-envelope fa-2x"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <hr class="bg-light">
+        <div class="text-center">
+            <p>&copy; {% now "Y" %} Сайт учителя информатики. Все права защищены.</p>
+            <p class="small text-muted">Последнее обновление: <span id="lastUpdated"></span></p>
+        </div>
     </div>
 </footer>
+
+<script>
+// Установка даты последнего обновления
+document.getElementById('lastUpdated').textContent = new Date().toLocaleDateString('ru-RU');
+
+// Функции для социальных сетей
+function shareOnVK() {
+    const url = encodeURIComponent(window.location.href);
+    window.open(`https://vk.com/share.php?url=${url}`, '_blank');
+}
+
+function shareOnTelegram() {
+    const url = encodeURIComponent(window.location.href);
+    const title = encodeURIComponent(document.title);
+    window.open(`https://t.me/share/url?url=${url}&text=${title}`, '_blank');
+}
+
+function sendEmail() {
+    window.location.href = 'mailto:teacher@school8.ru';
+}
+
+// Кнопка наверх
+function scrollToTop() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>

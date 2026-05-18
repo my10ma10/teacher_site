@@ -1,11 +1,90 @@
 {% extends 'base.html' %}
-{% block title %}О учителе{% endblock %}
+{% load static %}
+
+{% block title %}Об учителе - Сайт учителя информатики{% endblock %}
+
+{% block extra_css %}
+<style>
+    .teacher-stats {
+        background: #f8f9fa;
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+    blockquote {
+        border-left: 4px solid #3498db;
+        padding-left: 20px;
+        font-style: italic;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
-<article class="about">
-    <h1>Об учителе информатики</h1>
-    <div class="profile">
-        <p>Здесь будет информация о квалификации, опыте и контактах учителя.</p>
-        <p>Для редактирования этого раздела войдите в систему как учитель и используйте админ-панель.</p>
+<div class="container mt-5 pt-4">
+    <div class="row">
+        <div class="col-md-4 text-center">
+            <div class="teacher-stats">
+                <i class="fas fa-user-tie fa-5x text-primary mb-3"></i>
+                <h4>Иванова Анна Петровна</h4>
+                <p class="text-muted">Учитель информатики</p>
+            </div>
+
+            <div class="card mt-4">
+                <div class="card-body">
+                    <h6 class="card-title">Статистика</h6>
+                    <div class="d-flex justify-content-between">
+                        <small>Учеников:</small>
+                        <strong>156</strong>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <small>Материалов:</small>
+                        <strong>47</strong>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <small>Новостей:</small>
+                        <strong>12</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <h1 class="mb-4">Об учителе</h1>
+            
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Профессиональная информация</h5>
+                    <p><strong>Образование:</strong> Высшее, МГУ им. Ломоносова, факультет вычислительной математики и кибернетики</p>
+                    <p><strong>Стаж работы:</strong> 15 лет</p>
+                    <p><strong>Категория:</strong> Высшая квалификационная категория</p>
+                    <p><strong>Email:</strong> teacher@school8.ru</p>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Повышение квалификации</h5>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">2023 - "Современные технологии программирования"</li>
+                        <li class="list-group-item">2022 - "Цифровая образовательная среда"</li>
+                        <li class="list-group-item">2021 - "Подготовка к ЕГЭ по информатике"</li>
+                        <li class="list-group-item">2020 - "Искусственный интеллект в образовании"</li>
+                        <li class="list-group-item">2019 - "Веб-разработка для педагогов"</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Мое педагогическое кредо</h5>
+                    <blockquote class="blockquote bg-light p-3 rounded">
+                        <i class="fas fa-quote-left text-primary me-2"></i>
+                        Каждый ребенок талантлив по-своему. Моя задача - помочь раскрыть этот талант через современные технологии и индивидуальный подход к обучению. Информатика - это не просто школьный предмет, а ключ к пониманию цифрового мира, который окружает нас сегодня.
+                        <i class="fas fa-quote-right text-primary ms-2"></i>
+                    </blockquote>
+                </div>
+            </div>
+        </div>
     </div>
-</article>
+</div>
 {% endblock %}

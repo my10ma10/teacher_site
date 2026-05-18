@@ -1,16 +1,118 @@
 {% extends 'base.html' %}
+{% load widget_tweaks %}
 {% block title %}Вход в систему{% endblock %}
+
+{% block extra_css %}
+<style>
+    .login-container {
+        max-width: 450px;
+        margin: 80px auto;
+        padding: 30px;
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+    .login-header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+    .login-header i {
+        font-size: 3rem;
+        color: #0d6efd;
+        margin-bottom: 15px;
+    }
+    .form-floating > label {
+        color: #6c757d;
+    }
+    .btn-login {
+        width: 100%;
+        padding: 12px;
+        font-size: 1.1rem;
+        font-weight: 600;
+    }
+    .error-list {
+        color: #dc3545;
+        font-size: 0.875rem;
+        margin-top: 5px;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
-<form method="post" class="auth-form">
-    {% csrf_token %}
-    {% for field in form %}
-        <div class="form-group">
-            {{ field.label_tag }}
-            {{ field }}
-            {% if field.errors %}<small class="error">{{ field.errors|striptags }}</small>{% endif %}
+<div class="container">
+    <div class="login-container">
+        <div class="login-header">
+            <i class="fas fa-user-circle"></i>
+            <h2>Вход в систему</h2>
+            <p class="text-muted">Введите свои данные для входа</p>
         </div>
-    {% endfor %}
-    <button type="submit" class="btn">Войти</button>
-</form>
-<p>Нет аккаунта? <a href="{% url 'accounts:register' %}">Зарегистрироваться</a></p>
+
+        {% if form.errors %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="fas fa-exclamation-triangle me-2"></i>
+            <strong>Ошибка!</strong> Неверное имя пользователя или пароль.
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        {% endif %}
+
+        <form method="post" novalidate>
+            {% csrf_token %}
+            
+            <!-- Поле имени пользователя -->
+            <div class="form-floating mb-3">
+                {% render_field form.username class="form-control" placeholder="Имя пользователя" %}
+                <label for="{{ form.username.id_for_label }}">Имя пользователя</label>
+                {% if form.username.errors %}
+                    <div class="error-list">
+                        {% for error in form.username.errors %}
+                            <small>{{ error }}</small>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Поле пароля -->
+            <div class="form-floating mb-3">
+                {% render_field form.password class="form-control" placeholder="Пароль" %}
+                <label for="{{ form.password.id_for_label }}">Пароль</label>
+                {% if form.password.errors %}
+                    <div class="error-list">
+                        {% for error in form.password.errors %}
+                            <small>{{ error }}</small>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="rememberMe">
+                    <label class="form-check-label" for="rememberMe">
+                        Запомнить меня
+                    </label>
+                </div>
+                <a href="#" class="text-decoration-none small">Забыли пароль?</a>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-login">
+                <i class="fas fa-sign-in-alt me-2"></i>Войти
+            </button>
+        </form>
+
+        <hr class="my-4">
+
+        <div class="text-center">
+            <p class="mb-0 text-muted">Нет аккаунта?</p>
+            <a href="{% url 'accounts:register' %}" class="btn btn-outline-primary mt-2">
+                Зарегистрироваться
+            </a>
+        </div>
+        
+        <div class="text-center mt-3">
+            <a href="{% url 'core:home' %}" class="text-decoration-none small text-muted">
+                <i class="fas fa-arrow-left me-1"></i>Вернуться на главную
+            </a>
+        </div>
+    </div>
+</div>
 {% endblock %}

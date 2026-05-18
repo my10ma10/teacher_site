@@ -77,7 +77,7 @@ class ContactView(TemplateView):
         if form.is_valid():
             form.save()
             messages.success(request, 'Сообщение отправлено. Спасибо!')
-            return redirect('contacts')
+            return redirect('core:contacts')
         context = self.get_context_data(**kwargs)
         context['form'] = form
         return render(request, self.template_name, context)

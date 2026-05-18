@@ -1,22 +1,153 @@
 {% extends 'base.html' %}
-{% block title %}Предмет{% endblock %}
+{% load static %}
+
+{% block title %}Информатика - Сайт учителя информатики{% endblock %}
+
+{% block extra_css %}
+<style>
+    .topic-card {
+        border: none;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        margin-bottom: 20px;
+        transition: transform 0.3s ease;
+    }
+    .topic-card:hover {
+        transform: translateY(-5px);
+    }
+    .schedule-table {
+        background: white;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    }
+    .schedule-table th {
+        background: #3498db;
+        color: white;
+        border: none;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
-<h1>Программа по информатике</h1>
-{% for topic, mats in materials_by_topic.items %}
-    <section class="topic">
-        <h2>{{ topic }}</h2>
-        <ul>
-            {% for m in mats %}
-                <li>
-                    <a href="{% if m.file %}{{ m.file.url }}{% elif m.external_url %}{{ m.external_url }}{% endif %}" 
-                       {% if m.external_url %}target="_blank"{% endif %}>
-                        {{ m.title }}
-                    </a>
-                </li>
-            {% endfor %}
-        </ul>
-    </section>
-{% empty %}
-    <p>Материалы по темам пока не добавлены.</p>
-{% endfor %}
+<div class="container mt-5 pt-4">
+    <h1 class="text-center mb-5">Информатика</h1>
+    
+    <div class="row mb-5">
+        <div class="col-md-8">
+            <h3 class="mb-4">О предмете</h3>
+            <p>Информатика - это наука о способах получения, накопления, хранения, преобразования, передачи и использования информации. На уроках информатики мы изучаем:</p>
+            <ul>
+                <li>Основы алгоритмизации и программирования</li>
+                <li>Компьютерную графику и дизайн</li>
+                <li>Создание веб-сайтов</li>
+                <li>Базы данных и информационные системы</li>
+                <li>Кибербезопасность и цифровую грамотность</li>
+            </ul>
+        </div>
+        <div class="col-md-4">
+            <div class="card topic-card">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fas fa-code text-primary me-2"></i>Программирование</h5>
+                    <p class="card-text">Python, C++, Pascal, алгоритмы и структуры данных</p>
+                </div>
+            </div>
+            <div class="card topic-card">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fas fa-paint-brush text-success me-2"></i>Графика</h5>
+                    <p class="card-text">Photoshop, CorelDRAW, 3D-моделирование</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h3 class="mb-4">Расписание уроков</h3>
+    <div class="schedule-table mb-5">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Класс</th>
+                    <th>День недели</th>
+                    <th>Время</th>
+                    <th>Кабинет</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>7А</td>
+                    <td>Понедельник</td>
+                    <td>10:00-10:45</td>
+                    <td>305</td>
+                </tr>
+                <tr>
+                    <td>8Б</td>
+                    <td>Понедельник</td>
+                    <td>11:00-11:45</td>
+                    <td>305</td>
+                </tr>
+                <tr>
+                    <td>9А</td>
+                    <td>Вторник</td>
+                    <td>09:00-09:45</td>
+                    <td>305</td>
+                </tr>
+                <tr>
+                    <td>10А</td>
+                    <td>Среда</td>
+                    <td>13:00-13:45</td>
+                    <td>305</td>
+                </tr>
+                <tr>
+                    <td>11А</td>
+                    <td>Четверг</td>
+                    <td>14:00-14:45</td>
+                    <td>305</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h3 class="mb-4">Темы для изучения</h3>
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <div class="card topic-card">
+                <div class="card-body">
+                    <h5 class="card-title">7-8 классы</h5>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-check text-success me-2"></i>Основы компьютерной грамотности</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Работа в текстовом редакторе</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Создание презентаций</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Основы алгоритмизации</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card topic-card">
+                <div class="card-body">
+                    <h5 class="card-title">9 класс</h5>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-check text-success me-2"></i>Основы программирования на Python</li>
+                        <li><i class="fas fa-check text-success me-2"></i>HTML и CSS</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Базы данных</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Компьютерная графика</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card topic-card">
+                <div class="card-body">
+                    <h5 class="card-title">10-11 классы</h5>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-check text-success me-2"></i>Подготовка к ЕГЭ</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Объектно-ориентированное программирование</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Сетевые технологии</li>
+                        <li><i class="fas fa-check text-success me-2"></i>ИТ-проекты</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

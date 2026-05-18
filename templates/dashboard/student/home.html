@@ -1,34 +1,175 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Ученикам - Сайт учителя информатики{% endblock %}
+
 {% block content %}
-<div class="dashboard-container">
-    {% include 'partials/student_sidebar.html' %}
-    <main>
-        <h1>Мои задания</h1>
-        <h2>Требуют выполнения</h2>
-        <ul>
-            {% for a in pending %}
-            <li>{{ a.title }} <span class="date">(до {{ a.deadline|date:"d.m" }})</span>
-                <a href="{% url 'dashboard:submit_solution' a.id %}" class="btn-sm">Отправить</a>
-            </li>
-            {% empty %}
-            <li>Все текущие задания выполнены</li>
-            {% endfor %}
-        </ul>
-        <h2>Проверенные работы</h2>
-        <table class="data-table">
-            <thead><tr><th>Задание</th><th>Балл</th><th>Комментарий</th></tr></thead>
-            <tbody>
-                {% for g in graded %}
-                <tr>
-                    <td>{{ g.assignment.title }}</td>
-                    <td>{{ g.score }}/{{ g.assignment.max_score }}</td>
-                    <td>{{ g.comment|default:"-" }}</td>
-                </tr>
-                {% empty %}
-                <tr><td colspan="3">Пока нет проверенных работ</td></tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </main>
+<div class="container mt-5 pt-4">
+    <h1 class="text-center mb-5">Ученикам</h1>
+    
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0"><i class="fas fa-tasks me-2"></i>Домашние задания</h5>
+                </div>
+                <div class="card-body">
+                    <div class="accordion" id="homeworkAccordion">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne">
+                                    7 класс - до 25.12.2024
+                                </button>
+                            </h2>
+                            <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#homeworkAccordion">
+                                <div class="accordion-body">
+                                    <strong>Тема:</strong> Текстовый редактор<br>
+                                    <strong>Задание:</strong> Создать реферат на тему "История компьютеров" (не менее 2 страниц)<br>
+                                    <strong>Требования:</strong> Использовать разные стили текста, вставить изображения, создать содержание
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo">
+                                    8 класс - до 26.12.2024
+                                </button>
+                            </h2>
+                            <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#homeworkAccordion">
+                                <div class="accordion-body">
+                                    <strong>Тема:</strong> Электронные таблицы<br>
+                                    <strong>Задание:</strong> Создать таблицу успеваемости класса с использованием формул<br>
+                                    <strong>Требования:</strong> Автоматический расчет среднего балла, сортировка данных
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree">
+                                    9 класс - до 27.12.2024
+                                </button>
+                            </h2>
+                            <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#homeworkAccordion">
+                                <div class="accordion-body">
+                                    <strong>Тема:</strong> Основы Python<br>
+                                    <strong>Задание:</strong> Написать программу "Калькулятор"<br>
+                                    <strong>Требования:</strong> Реализовать основные арифметические операции, обработку ошибок
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="fas fa-calendar-check me-2"></i>Ближайшие события</h5>
+                </div>
+                <div class="card-body">
+                    <div class="list-group">
+                        <div class="list-group-item">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h6 class="mb-1">Школьная олимпиада по информатике</h6>
+                                <small class="text-muted">15.01.2025</small>
+                            </div>
+                            <p class="mb-1">Отборочный этап среди 7-11 классов</p>
+                            <small>Кабинет 305, 14:00</small>
+                        </div>
+                        <div class="list-group-item">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h6 class="mb-1">Защита IT-проектов</h6>
+                                <small class="text-muted">22.01.2025</small>
+                            </div>
+                            <p class="mb-1">Годовая проектная работа для 9-11 классов</p>
+                            <small>Актовый зал, 15:00</small>
+                        </div>
+                        <div class="list-group-item">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h6 class="mb-1">Открытый урок "Основы кибербезопасности"</h6>
+                                <small class="text-muted">30.01.2025</small>
+                            </div>
+                            <p class="mb-1">Приглашаются родители и ученики 8-9 классов</p>
+                            <small>Кабинет 305, 18:00</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="mb-0"><i class="fas fa-graduation-cap me-2"></i>Успеваемость</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Ученик</th>
+                                    <th>Класс</th>
+                                    <th>Средний балл</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Иванов Иван</td>
+                                    <td>8А</td>
+                                    <td><span class="badge bg-success">4.8</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Петрова Мария</td>
+                                    <td>9Б</td>
+                                    <td><span class="badge bg-success">4.9</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Сидоров Алексей</td>
+                                    <td>10А</td>
+                                    <td><span class="badge bg-warning">3.7</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Козлова Анна</td>
+                                    <td>7Б</td>
+                                    <td><span class="badge bg-success">5.0</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p class="text-muted small">*Данные обновляются еженедельно</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0"><i class="fas fa-lightbulb me-2"></i>Полезные ресурсы</h5>
+                </div>
+                <div class="card-body">
+                    <div class="list-group list-group-flush">
+                        <a href="https://stepik.org/catalog" class="list-group-item list-group-item-action" target="_blank">
+                            <i class="fas fa-external-link-alt me-2"></i>Stepik - бесплатные курсы по программированию
+                        </a>
+                        <a href="https://python.org" class="list-group-item list-group-item-action" target="_blank">
+                            <i class="fab fa-python me-2"></i>Официальный сайт Python
+                        </a>
+                        <a href="https://htmlbook.ru" class="list-group-item list-group-item-action" target="_blank">
+                            <i class="fab fa-html5 me-2"></i>HTMLbook - справочник по HTML/CSS
+                        </a>
+                        <a href="https://code.org" class="list-group-item list-group-item-action" target="_blank">
+                            <i class="fas fa-code me-2"></i>Code.org - основы программирования
+                        </a>
+                        <a href="https://codewars.com" class="list-group-item list-group-item-action" target="_blank">
+                            <i class="fas fa-gamepad me-2"></i>Codewars - задачи по программированию
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}

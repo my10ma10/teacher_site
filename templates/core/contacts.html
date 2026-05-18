@@ -1,10 +1,387 @@
 {% extends 'base.html' %}
-{% block title %}Контакты{% endblock %}
+{% load static %}
+
+{% block title %}Контакты - Сайт учителя информатики{% endblock %}
+
+{% block extra_css %}
+<style>
+    .contact-card {
+        transition: transform 0.3s ease;
+    }
+    .contact-card:hover {
+        transform: translateY(-5px);
+    }
+</style>
+{% endblock %}
+
 {% block content %}
-<h1>Связаться с учителем</h1>
-<form method="post" class="contact-form">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn">Отправить</button>
-</form>
+<!-- Модальное окно подтверждения отправки -->
+<div class="modal fade" id="successModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title">
+                    <i class="fas fa-check-circle me-2"></i>Сообщение отправлено!
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body text-center">
+                <i class="fas fa-envelope-open fa-3x text-success mb-3"></i>
+                <p>Ваше сообщение успешно отправлено.</p>
+                <p>Я свяжусь с вами в ближайшее время.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success w-100" data-bs-dismiss="modal">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container mt-5 pt-4">
+    <h1 class="text-center mb-4">Контакты</h1>
+    <p class="text-center text-muted mb-5">Свяжитесь со мной для получения дополнительной информации</p>
+    
+    <div class="row">
+        <div class="col-lg-8">
+            <!-- Форма обратной связи -->
+            <div class="card mb-5 contact-card">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0"><i class="fas fa-envelope me-2"></i>Написать сообщение</h4>
+                </div>
+                <div class="card-body">
+                    <!-- В Django action обычно указывает на тот же URL или специальный view -->
+                    <form id="contactForm" method="POST" action="">
+                        {% csrf_token %}
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="name" class="form-label">Ваше имя *</label>
+                                <input type="text" class="form-control" id="name" name="name" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="email" class="form-label">Ваш email *</label>
+                                <input type="email" class="form-control" id="email" name="email" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="phone" class="form-label">Телефон (необязательно)</label>
+                            <input type="tel" class="form-control" id="phone" name="phone">
+                        </div>
+                        <div class="mb-3">
+                            <label for="subject" class="form-label">Тема сообщения *</label>
+                            <select class="form-select" id="subject" name="subject" required>
+                                <option value="">Выберите тему</option>
+                                <option value="Вопрос по предмету">Вопрос по предмету</option>
+                                <option value="Вопрос об оценках">Вопрос об оценках</option>
+                                <option value="Олимпиады и конкурсы">Олимпиады и конкурсы</option>
+                                <option value="Консультация">Консультация</option>
+                                <option value="Другое">Другое</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="message" class="form-label">Текст сообщения *</label>
+                            <textarea class="form-control" id="message" name="message" rows="5" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="studentCheck" name="student">
+                                <label class="form-check-label" for="studentCheck">
+                                    Я ученик/ученица
+                                </label>
+                            </div>
+                            <div class="form-check mt-2">
+                                <input class="form-check-input" type="checkbox" id="parentCheck" name="parent">
+                                <label class="form-check-label" for="parentCheck">
+                                    Я родитель ученика
+                                </label>
+                            </div>
+                        </div>
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="consent" required>
+                            <label class="form-check-label" for="consent">
+                                Я согласен на обработку персональных данных
+                            </label>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-lg w-100">
+                            <i class="fas fa-paper-plane me-2"></i>Отправить сообщение
+                        </button>
+                    </form>
+                    <div id="formMessage" class="mt-3"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <!-- Контактная информация -->
+            <div class="card mb-4 contact-card">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0"><i class="fas fa-info-circle me-2"></i>Контактная информация</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex mb-3">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-school fa-lg text-primary"></i>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h6>Адрес лицея</h6>
+                            <p class="mb-0">г. Москва, ул. Образцова, д. 8</p>
+                            <small class="text-muted">МБОУ Лицей №8</small>
+                        </div>
+                    </div>
+                    <div class="d-flex mb-3">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-user-tie fa-lg text-primary"></i>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h6>Учитель</h6>
+                            <p class="mb-0">Иванова Анна Петровна</p>
+                            <small class="text-muted">Учитель информатики</small>
+                        </div>
+                    </div>
+                    <div class="d-flex mb-3">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-envelope fa-lg text-primary"></i>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h6>Email для связи</h6>
+                            <p class="mb-0">Tville100@yandex.ru</p>
+                            <small class="text-muted">Ответ в течение 24 часов</small>
+                        </div>
+                    </div>
+                    <div class="d-flex mb-3">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-phone fa-lg text-primary"></i>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h6>Телефон учительской</h6>
+                            <p class="mb-0">+7 (495) 123-45-67</p>
+                            <small class="text-muted">Пн-Пт: 9:00-17:00</small>
+                        </div>
+                    </div>
+                    <div class="d-flex">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-clock fa-lg text-primary"></i>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h6>Часы консультаций</h6>
+                            <p class="mb-0">Понедельник, среда: 15:00-16:00</p>
+                            <small class="text-muted">Кабинет 305</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Карта проезда -->
+            <div class="card mb-4 contact-card">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="mb-0"><i class="fas fa-map-marker-alt me-2"></i>Как добраться</h5>
+                </div>
+                <div class="card-body">
+                    <div class="map-placeholder bg-light p-4 text-center rounded mb-3">
+                        <i class="fas fa-map fa-3x text-muted mb-3"></i>
+                        <p class="mb-0">Карта расположения лицея</p>
+                    </div>
+                    <p class="small text-muted">
+                        <strong>На общественном транспорте:</strong><br>
+                        • Метро "Достоевская" - 5 минут пешком<br>
+                        • Автобусы: 123, 456, 789<br>
+                        • Троллейбусы: 12, 34
+                    </p>
+                </div>
+            </div>
+
+            <!-- Социальные сети -->
+            <div class="card contact-card">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0"><i class="fas fa-share-alt me-2"></i>Социальные сети</h5>
+                </div>
+                <div class="card-body text-center">
+                    <div class="row g-3">
+                        <div class="col-4">
+                            <a href="mailto:Tville100@yandex.ru?subject=Вопрос с сайта" class="text-primary d-block">
+                                <i class="fas fa-envelope fa-2x"></i>
+                                <div class="small mt-2">Email</div>
+                            </a>
+                        </div>
+                        <div class="col-4">
+                            <a href="https://vk.com" target="_blank" class="text-primary d-block">
+                                <i class="fab fa-vk fa-2x"></i>
+                                <div class="small mt-2">ВКонтакте</div>
+                            </a>
+                        </div>
+                        <div class="col-4">
+                            <a href="https://t.me" target="_blank" class="text-info d-block">
+                                <i class="fab fa-telegram fa-2x"></i>
+                                <div class="small mt-2">Telegram</div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FAQ -->
+    <div class="row mt-5">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-secondary text-white">
+                    <h5 class="mb-0"><i class="fas fa-question-circle me-2"></i>Часто задаваемые вопросы</h5>
+                </div>
+                <div class="card-body">
+                    <div class="accordion" id="faqAccordion">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                                    Как узнать оценки моего ребенка?
+                                </button>
+                            </h2>
+                            <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    Вы можете написать мне через форму обратной связи, указав ФИО ученика и класс. Я отвечу в течение 24 часов.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                                    Как подготовиться к олимпиаде?
+                                </button>
+                            </h2>
+                            <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    Материалы для подготовки находятся в разделе "Методкопилка". Также вы можете записаться на индивидуальную консультацию.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                                    Как получить консультацию?
+                                </button>
+                            </h2>
+                            <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    Консультации проводятся по понедельникам и средам с 15:00 до 16:00 в кабинете 305. Для записи используйте форму обратной связи.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Обработка формы через AJAX (Django)
+    document.getElementById('contactForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const form = e.target;
+        const submitBtn = form.querySelector('button[type="submit"]');
+        const originalBtnText = submitBtn.innerHTML;
+        const formMessage = document.getElementById('formMessage');
+        
+        // Показать состояние загрузки
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Отправка...';
+        submitBtn.disabled = true;
+        formMessage.innerHTML = '';
+        
+        try {
+            const formData = new FormData(form);
+            
+            const response = await fetch(window.location.href, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                    // CSRF токен уже добавлен в FormData благодаря {% csrf_token %}
+                }
+            });
+            
+            const data = await response.json();
+            
+            if (response.ok && data.success) {
+                // Успешная отправка
+                const modal = new bootstrap.Modal(document.getElementById('successModal'));
+                modal.show();
+                
+                // Очистить форму
+                form.reset();
+                
+                // Сохранить в localStorage (опционально)
+                saveContactMessage(formData);
+                
+            } else {
+                // Ошибка валидации или сервера
+                let errorMsg = data.message || 'Произошла ошибка при отправке. Попробуйте позже.';
+                if (data.errors) {
+                    errorMsg = Object.values(data.errors).flat().join('<br>');
+                }
+                formMessage.innerHTML = `<div class="alert alert-danger">${errorMsg}</div>`;
+            }
+            
+        } catch (error) {
+            console.error('Error:', error);
+            // Fallback если JS не сработал или сеть недоступна
+            formMessage.innerHTML = `
+                <div class="alert alert-warning">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    <strong>Не удалось отправить форму автоматически</strong>
+                    <p class="mb-2">Пожалуйста, отправьте сообщение вручную:</p>
+                    <button type="button" class="btn btn-primary btn-sm" onclick="sendEmailManually()">
+                        <i class="fas fa-envelope me-1"></i>Отправить через почту
+                    </button>
+                </div>
+            `;
+        } finally {
+            // Восстановить кнопку
+            submitBtn.innerHTML = originalBtnText;
+            submitBtn.disabled = false;
+        }
+    });
+    
+    function saveContactMessage(formData) {
+        const message = {
+            name: formData.get('name'),
+            email: formData.get('email'),
+            subject: formData.get('subject'),
+            date: new Date().toISOString(),
+            status: 'sent'
+        };
+        
+        let messages = JSON.parse(localStorage.getItem('contactMessages') || '[]');
+        messages.push(message);
+        localStorage.setItem('contactMessages', JSON.stringify(messages));
+    }
+    
+    function sendEmailManually() {
+        const name = document.getElementById('name').value;
+        const email = document.getElementById('email').value;
+        const subject = document.getElementById('subject').value;
+        const message = document.getElementById('message').value;
+        
+        const emailBody = `Имя: ${name}%0D%0AEmail: ${email}%0D%0AТема: ${subject}%0D%0A%0D%0AСообщение:%0D%0A${message}`;
+        
+        window.location.href = `mailto:Tville100@yandex.ru?subject=${encodeURIComponent('Сообщение с сайта: ' + subject)}&body=${emailBody}`;
+    }
+    
+    // Показать инструкцию при первом посещении
+    document.addEventListener('DOMContentLoaded', function() {
+        if (!localStorage.getItem('contactFormViewed')) {
+            setTimeout(() => {
+                document.getElementById('formMessage').innerHTML = `
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>
+                        <strong>Важно!</strong> Все сообщения отправляются на почту учителя: Tville100@yandex.ru
+                    </div>
+                `;
+                localStorage.setItem('contactFormViewed', 'true');
+            }, 1000);
+        }
+    });
+</script>
 {% endblock %}

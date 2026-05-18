@@ -18,6 +18,7 @@ INSTALLED_APPS = [
     'core',
     'materials',
     'dashboard',
+    'widget_tweaks',
 ]
 
 MIDDLEWARE = [
