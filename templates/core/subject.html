@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}Предмет{% endblock %}
+{% block content %}
+<h1>Программа по информатике</h1>
+{% for topic, mats in materials_by_topic.items %}
+    <section class="topic">
+        <h2>{{ topic }}</h2>
+        <ul>
+            {% for m in mats %}
+                <li>
+                    <a href="{% if m.file %}{{ m.file.url }}{% elif m.external_url %}{{ m.external_url }}{% endif %}" 
+                       {% if m.external_url %}target="_blank"{% endif %}>
+                        {{ m.title }}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </section>
+{% empty %}
+    <p>Материалы по темам пока не добавлены.</p>
+{% endfor %}
+{% endblock %}

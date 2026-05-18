@@ -1,0 +1,148 @@
+/* Стили для новостей */
+.news-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    margin-bottom: 20px;
+    border: none;
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.news-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+}
+
+.news-image {
+    height: 250px;
+    object-fit: cover;
+    width: 100%;
+}
+
+.news-date {
+    font-size: 0.9rem;
+    color: #6c757d;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.news-date i {
+    color: #3498db;
+}
+
+.news-category {
+    display: inline-block;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.category-олимпиада {
+    background: linear-gradient(135deg, #f39c12, #f1c40f);
+    color: #fff;
+}
+
+.category-конкурс {
+    background: linear-gradient(135deg, #9b59b6, #8e44ad);
+    color: #fff;
+}
+
+.category-мероприятие {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    color: #fff;
+}
+
+.category-расписание {
+    background: linear-gradient(135deg, #2ecc71, #27ae60);
+    color: #fff;
+}
+
+.category-материалы {
+    background: linear-gradient(135deg, #e67e22, #d35400);
+    color: #fff;
+}
+
+.category-общее {
+    background: linear-gradient(135deg, #95a5a6, #7f8c8d);
+    color: #fff;
+}
+
+/* Поиск и фильтры */
+.news-controls {
+    margin-bottom: 30px;
+}
+
+.search-box {
+    border-radius: 25px;
+    padding: 10px 20px;
+    border: 2px solid #e0e0e0;
+    transition: all 0.3s ease;
+}
+
+.search-box:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 0 0.2rem rgba(52,152,219,.25);
+    outline: none;
+}
+
+.category-filter {
+    margin-bottom: 10px;
+}
+
+.category-filter .btn {
+    margin: 0 5px 10px;
+    border-radius: 25px;
+    padding: 8px 20px;
+}
+
+/* Статистика */
+.news-stats {
+    background: linear-gradient(135deg, #2c3e50, #3498db);
+    color: white;
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.news-stats h3 {
+    font-size: 2rem;
+    font-weight: bold;
+    margin: 0;
+}
+
+/* Пагинация */
+.pagination {
+    margin-top: 30px;
+}
+
+.pagination .page-link {
+    border-radius: 8px;
+    margin: 0 3px;
+    color: #3498db;
+    border: none;
+    padding: 10px 15px;
+}
+
+.pagination .page-link:hover {
+    background-color: #3498db;
+    color: white;
+}
+
+.pagination .active .page-link {
+    background-color: #3498db;
+    color: white;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .category-filter .btn {
+        font-size: 0.8rem;
+        padding: 6px 12px;
+    }
+    
+    .news-stats h3 {
+        font-size: 1.5rem;
+    }
+}

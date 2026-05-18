@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="dashboard-container">
+    {% include 'partials/student_sidebar.html' %}
+    <main>
+        <h1>Отправка решения: {{ assignment.title }}</h1>
+        <p>Дедлайн: {{ assignment.deadline|date:"d.m.Y H:i" }}</p>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn">Отправить</button>
+        </form>
+    </main>
+</div>
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="dashboard-container">
+    {% include 'partials/teacher_sidebar.html' %}
+    <main>
+        <h1>Проверка работы: {{ submission.student.get_full_name }}</h1>
+        <p>Задание: {{ submission.assignment.title }}</p>
+        {% if submission.code_text %}
+            <pre class="code-preview">{{ submission.code_text }}</pre>
+        {% elif submission.file_upload %}
+            <a href="{{ submission.file_upload.url }}" class="btn" target="_blank">Скачать файл</a>
+        {% endif %}
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn">Сохранить оценку</button>
+        </form>
+    </main>
+</div>
+{% endblock %}

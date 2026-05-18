@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="dashboard-container">
+    {% include 'partials/teacher_sidebar.html' %}
+    <main>
+        <h1>Работы на проверку</h1>
+        <table class="data-table">
+            <thead><tr><th>Ученик</th><th>Задание</th><th>Дата</th><th>Действие</th></tr></thead>
+            <tbody>
+                {% for s in submissions %}
+                <tr>
+                    <td>{{ s.student.get_full_name }}</td>
+                    <td>{{ s.assignment.title }}</td>
+                    <td>{{ s.submitted_at|date:"d.m.Y H:i" }}</td>
+                    <td><a href="{% url 'dashboard:grade_submission' s.pk %}" class="btn-sm">Проверить</a></td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="4">Все работы проверены</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </main>
+</div>
+{% endblock %}

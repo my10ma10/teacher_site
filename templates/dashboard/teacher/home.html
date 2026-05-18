@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}Кабинет учителя{% endblock %}
+{% block content %}
+<div class="dashboard-container">
+    {% include 'partials/teacher_sidebar.html' %}
+    <main>
+        <h1>Панель управления</h1>
+        <div class="stats">
+            <div class="card">Заданий: {{ stats.total }}</div>
+            <div class="card warning">На проверке: {{ stats.pending }}</div>
+        </div>
+        <h2>Активные задания</h2>
+        <ul>
+            {% for a in assignments %}
+            <li>{{ a.title }} <span class="date">(до {{ a.deadline|date:"d.m" }})</span></li>
+            {% empty %}
+            <li>Нет активных заданий</li>
+            {% endfor %}
+        </ul>
+    </main>
+</div>
+{% endblock %}

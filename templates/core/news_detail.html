@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %}{{ news.title }}{% endblock %}
+{% block content %}
+<article class="news-detail">
+    <h1>{{ news.title }}</h1>
+    <div class="meta">
+        <time>{{ news.published_at|date:"d.m.Y H:i" }}</time>
+        <span class="badge">{{ news.get_category_display }}</span>
+    </div>
+    <div class="content">
+        {{ news.content|linebreaks }}
+    </div>
+</article>
+<a href="{% url 'core:news_list' %}" class="btn">← К списку новостей</a>
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block title %}Главная — Сайт учителя информатики{% endblock %}
+{% block content %}
+<section class="hero">
+    <h1>Добро пожаловать на сайт учителя информатики</h1>
+    <p>Здесь вы найдёте материалы, задания и новости по предмету</p>
+</section>
+
+<section class="news-preview">
+    <h2>Последние новости</h2>
+    {% for item in latest_news %}
+        <article class="news-card">
+            <h3><a href="{{ item.get_absolute_url }}">{{ item.title }}</a></h3>
+            <time>{{ item.published_at|date:"d.m.Y" }}</time>
+            <p>{{ item.content|truncatewords:30 }}</p>
+        </article>
+    {% empty %}
+        <p>Новостей пока нет.</p>
+    {% endfor %}
+    <a href="{% url 'core:news_list' %}" class="btn">Все новости</a>
+</section>
+
+<section class="materials-preview">
+    <h2>Рекомендуемые материалы</h2>
+    <div class="materials-grid">
+        {% for mat in featured_materials %}
+            <div class="material-card">
+                <span class="badge">{{ mat.get_material_type_display }}</span>
+                <h4>{{ mat.title }}</h4>
+                {% if mat.file %}
+                    <a href="{{ mat.file.url }}" class="btn-sm" download>Скачать</a>
+                {% elif mat.external_url %}
+                    <a href="{{ mat.external_url }}" class="btn-sm" target="_blank">Перейти</a>
+                {% endif %}
+            </div>
+        {% empty %}
+            <p>Материалы пока не добавлены.</p>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

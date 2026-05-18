@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block title %}Учебные материалы{% endblock %}
+{% block content %}
+<h1>Материалы</h1>
+
+<form method="get" class="filters">
+    <input type="text" name="q" placeholder="Поиск..." value="{{ request.GET.q }}">
+    <select name="type">
+        <option value="">Все типы</option>
+        <option value="presentation" {% if request.GET.type == 'presentation' %}selected{% endif %}>Презентации</option>
+        <option value="notes" {% if request.GET.type == 'notes' %}selected{% endif %}>Конспекты</option>
+        <option value="video" {% if request.GET.type == 'video' %}selected{% endif %}>Видео</option>
+        <option value="task" {% if request.GET.type == 'task' %}selected{% endif %}>Практика</option>
+    </select>
+    <button type="submit" class="btn">Фильтровать</button>
+</form>
+
+<div class="materials-grid">
+    {% for mat in materials %}
+        <div class="material-card">
+            <span class="badge">{{ mat.get_material_type_display }}</span>
+            <h4>{{ mat.title }}</h4>
+            <p>{{ mat.description|truncatewords:15 }}</p>
+            {% if mat.file %}
+                <a href="{{ mat.file.url }}" class="btn-sm" download>Скачать</a>
+            {% elif mat.external_url %}
+                <a href="{{ mat.external_url }}" class="btn-sm" target="_blank">Перейти</a>
+            {% endif %}
+        </div>
+    {% empty %}
+        <p>Материалы не найдены.</p>
+    {% endfor %}
+</div>
+
+{% if is_paginated %}
+<div class="pagination">
+    {% if page_obj.has_previous %}<a href="?page={{ page_obj.previous_page_number }}&{{ request.GET.urlencode }}">Назад</a>{% endif %}
+    <span>Стр. {{ page_obj.number }}</span>
+    {% if page_obj.has_next %}<a href="?page={{ page_obj.next_page_number }}&{{ request.GET.urlencode }}">Вперёд</a>{% endif %}
+</div>
+{% endif %}
+{% endblock %}
