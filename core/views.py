@@ -3,7 +3,7 @@ from django.views.generic import ListView, DetailView, TemplateView
 from django.contrib import messages
 from django.db.models import Q
 from django.core.paginator import Paginator
-from .models import News, Material, GalleryItem
+from .models import News, Material, GalleryItem, Schedule
 from .forms import ContactForm
 
 class HomeView(TemplateView):
@@ -97,4 +97,25 @@ class SubjectView(TemplateView):
             'Алгоритмы': Material.objects.filter(tags__icontains='алгоритмы')[:5],
             'Проекты': Material.objects.filter(tags__icontains='проект')[:5],
         }
+        return context
+    
+    
+class ScheduleView(ListView):
+    """Страница расписания с фильтром по классу"""
+    model = Schedule
+    template_name = 'core/schedule.html'
+    context_object_name = 'schedule_items'
+    
+    def get_queryset(self):
+        qs = Schedule.objects.all()
+        class_id = self.request.GET.get('class')
+        if class_id:
+            qs = qs.filter(class_group_id=class_id)
+        return qs
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        from accounts.models import ClassGroup
+        context['classes'] = ClassGroup.objects.all()
+        context['selected_class'] = self.request.GET.get('class', '')
         return context

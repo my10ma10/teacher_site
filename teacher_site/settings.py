@@ -32,6 +32,8 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'teacher_site.urls'
+LOGIN_REDIRECT_URL = '/'  # Лучше на главную, а дальше пусть роутит по ролям
+LOGOUT_REDIRECT_URL = '/'
 
 TEMPLATES = [
     {

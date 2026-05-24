@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Расписание уроков{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h1 class="display-6">📅 Расписание уроков</h1>
+            <p class="text-muted">Выберите класс для просмотра расписания</p>
+        </div>
+    </div>
+
+    <!-- Фильтр по классу -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="get" class="row g-3 align-items-end">
+                <div class="col-md-6">
+                    <label for="class-filter" class="form-label">Класс:</label>
+                    <select name="class" id="class-filter" class="form-select">
+                        <option value="">Все классы</option>
+                        {% for cls in classes %}
+                            <option value="{{ cls.id }}" {% if selected_class == cls.id|stringformat:"s" %}selected{% endif %}>
+                                {{ cls.name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="bi bi-funnel"></i> Показать
+                    </button>
+                </div>
+                <div class="col-md-3">
+                    <a href="{% url 'core:schedule' %}" class="btn btn-outline-secondary w-100">
+                        <i class="bi bi-x-circle"></i> Сбросить
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Таблица расписания -->
+    {% if schedule_items %}
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover table-bordered">
+                        <thead class="table-light">
+                            <tr>
+                                <th scope="col" style="width: 15%;">День</th>
+                                <th scope="col" style="width: 10%;">Урок</th>
+                                <th scope="col" style="width: 25%;">Предмет</th>
+                                <th scope="col" style="width: 20%;">Класс</th>
+                                <th scope="col" style="width: 20%;">Учитель</th>
+                                <th scope="col" style="width: 10%;">Кабинет</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in schedule_items %}
+                                <tr>
+                                    <td>{{ item.get_day_of_week_display }}</td>
+                                    <td class="text-center">{{ item.lesson_number }}</td>
+                                    <td><strong>{{ item.subject }}</strong></td>
+                                    <td>{{ item.class_group.name }}</td>
+                                    <td>{{ item.teacher.get_full_name|default:item.teacher.username|default:"—" }}</td>
+                                    <td class="text-center">{{ item.room|default:"—" }}</td>
+                                </tr>
+                            {% empty %}
+                                <tr>
+                                    <td colspan="6" class="text-center text-muted py-4">
+                                        Расписание для выбранного класса не найдено
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Легенда -->
+        <div class="card mt-4">
+            <div class="card-body">
+                <h6 class="card-title">💡 Как пользоваться расписанием:</h6>
+                <ul class="mb-0">
+                    <li>Выберите нужный класс из выпадающего списка</li>
+                    <li>Нажмите кнопку "Показать" для фильтрации</li>
+                    <li>Используйте кнопку "Сбросить" чтобы увидеть все классы</li>
+                </ul>
+            </div>
+        </div>
+    {% else %}
+        <div class="alert alert-info" role="alert">
+            <i class="bi bi-info-circle"></i>
+            Расписание пока не заполнено. Обратитесь к учителю для добавления данных.
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

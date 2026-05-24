@@ -1,5 +1,22 @@
 from django.contrib import admin
-from .models import News, Material, GalleryItem, Feedback
+from .models import News, Material, GalleryItem, Feedback, Schedule
+
+@admin.register(Schedule)
+class ScheduleAdmin(admin.ModelAdmin):
+    list_display = ['day_of_week', 'lesson_number', 'subject', 'class_group', 'teacher', 'room']
+    list_filter = ['day_of_week', 'class_group', 'subject']
+    search_fields = ['subject', 'teacher__username', 'class_group__name', 'room']
+    ordering = ['day_of_week', 'lesson_number']
+
+    fieldsets = (
+        ('Основная информация', {
+            'fields': ('day_of_week', 'lesson_number', 'subject', 'class_group')
+        }),
+        ('Дополнительно', {
+            'fields': ('teacher', 'room'),
+            'classes': ('collapse',)
+        }),
+    )
 
 @admin.register(News)
 class NewsAdmin(admin.ModelAdmin):

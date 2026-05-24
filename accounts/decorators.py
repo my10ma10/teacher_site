@@ -1,10 +1,30 @@
-from django.contrib.auth.decorators import user_passes_test
+from functools import wraps
+from django.core.exceptions import PermissionDenied
+from django.shortcuts import redirect
+from django.urls import reverse_lazy
 
-def role_required(required_role):
-    def check_role(user):
-        return user.is_authenticated and user.role == required_role
-    return user_passes_test(check_role, login_url='accounts:login')
+def teacher_required(view_func):
+    @wraps(view_func)
+    def wrapper(request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect(f'{reverse_lazy("accounts:login")}?next={request.path}')
+        
+        if hasattr(request.user, 'role') and request.user.role == 'teacher':
+            return view_func(request, *args, **kwargs)
+        
+        raise PermissionDenied("Доступ только для учителей.")
+    
+    return wrapper
 
-teacher_required = role_required('teacher')
-student_required = role_required('student')
-parent_required = role_required('parent')
+def student_required(view_func):
+    @wraps(view_func)
+    def wrapper(request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect(f'{reverse_lazy("accounts:login")}?next={request.path}')
+        
+        if hasattr(request.user, 'role') and request.user.role == 'student':
+            return view_func(request, *args, **kwargs)
+            
+        raise PermissionDenied("Доступ только для учеников.")
+    
+    return wrapper
