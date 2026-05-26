@@ -8,11 +8,18 @@ document.addEventListener('DOMContentLoaded', function() {
     initBackToTop();
     
     // Установка текущего года в футере
-    document.getElementById('currentYear').textContent = new Date().getFullYear();
-    document.getElementById('lastUpdated').textContent = formatDate(new Date());
+    const yearElement = document.getElementById('currentYear');
+    if (yearElement) {
+        yearElement.textContent = new Date().getFullYear();
+    }
     
+    const lastUpdatedElement = document.getElementById('lastUpdated');
+    if (lastUpdatedElement) {
+        lastUpdatedElement.textContent = formatDate(new Date());
+    }
+
     // Загрузка новостей
-    loadNews();
+    // loadNews();
     
     // Показать уведомление при первом посещении
     if (!localStorage.getItem('visited')) {
