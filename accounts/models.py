@@ -13,7 +13,6 @@ class CustomUser(AbstractUser):
     ROLE_CHOICES = [
         ('teacher', 'Учитель'),
         ('student', 'Ученик'),
-        ('parent', 'Родитель'),
     ]
     role = models.CharField(max_length=10, choices=ROLE_CHOICES, default='student')
     class_group = models.ForeignKey(ClassGroup, on_delete=models.SET_NULL, null=True, blank=True)

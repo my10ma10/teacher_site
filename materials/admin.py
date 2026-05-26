@@ -28,13 +28,13 @@ class AssignmentAdmin(admin.ModelAdmin):
     
     fieldsets = (
         ('Основная информация', {
-            'fields': ('title', 'description', 'subject', 'class_group')
+            'fields': ('title', 'description', 'class_group')
         }),
         ('Параметры', {
             'fields': ('deadline', 'max_score', 'status')
         }),
         ('Вложения', {
-            'fields': ('attachment',),
+            'fields': ('attachments',),
             'classes': ('collapse',)
         }),
     )

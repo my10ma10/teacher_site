@@ -31,6 +31,26 @@ def create_assignment(request):
     return render(request, 'dashboard/teacher/create_assignment.html', {'form': form})
 
 @teacher_required
+def update_assignment(request, pk):
+    assignment = get_object_or_404(Assignment, pk=pk, teacher=request.user)
+    if request.method == 'POST':
+        form = AssignmentForm(request.POST, request.FILES, instance=assignment)
+        if form.is_valid():
+            form.save()
+            return redirect('dashboard:teacher_submissions', pk=assignment.pk)
+    else:
+        form = AssignmentForm(instance=assignment)
+    return render(request, 'dashboard/teacher/create_assignment.html', {'form': form, 'action': 'edit'})
+
+@teacher_required
+def delete_assignment(request, pk):
+    assignment = get_object_or_404(Assignment, pk=pk, teacher=request.user)
+    if request.method == 'POST':
+        assignment.delete()
+        return redirect('dashboard:teacher_dashboard')
+    return render(request, 'dashboard/teacher/delete_confirm.html', {'object': assignment})
+
+@teacher_required
 def submission_list(request):
     submissions = Submission.objects.filter(
         assignment__class_group=request.user.class_group,
@@ -60,9 +80,14 @@ def grade_submission(request, pk):
 def student_dashboard(request):
     my_class = request.user.class_group
     assigned = Assignment.objects.filter(class_group=my_class, status='published')
-    submitted_ids = Submission.objects.filter(student=request.user).values_list('assignment_id', flat=True)
+    submitted_ids = Submission.objects.filter(student=request.user
+                                    ).values_list('assignment_id', flat=True)
     pending = assigned.exclude(id__in=submitted_ids)
-    graded = Submission.objects.filter(student=request.user).select_related('assignment', 'grade').order_by('-submitted_at')
+    
+    graded = Submission.objects.filter(student=request.user
+                        ).select_related('assignment', 'grade'
+                        ).order_by('-submitted_at')
+    
     return render(request, 'dashboard/student/home.html', {'pending': pending, 'graded': graded})
 
 @student_required

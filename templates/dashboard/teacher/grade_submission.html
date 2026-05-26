@@ -1,20 +1,43 @@
 {% extends 'base.html' %}
+
+{% block title %}Проверка работы{% endblock %}
+
 {% block content %}
-<div class="dashboard-container">
-    {% include 'partials/teacher_sidebar.html' %}
-    <main>
-        <h1>Проверка работы: {{ submission.student.get_full_name }}</h1>
-        <p>Задание: {{ submission.assignment.title }}</p>
-        {% if submission.code_text %}
-            <pre class="code-preview">{{ submission.code_text }}</pre>
-        {% elif submission.file_upload %}
-            <a href="{{ submission.file_upload.url }}" class="btn" target="_blank">Скачать файл</a>
-        {% endif %}
-        <form method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit" class="btn">Сохранить оценку</button>
-        </form>
-    </main>
+<div class="container mt-4">
+    <h2>Проверка работы</h2>
+    <div class="card mb-3">
+        <div class="card-header">
+            Задание: {{ submission.assignment.title }} | Ученик: {{ submission.student.get_full_name }}
+        </div>
+        <div class="card-body">
+            {% if submission.code_text %}
+                <h5>Код:</h5>
+                <pre><code>{{ submission.code_text }}</code></pre>
+            {% endif %}
+            
+            {% if submission.file_upload %}
+                <h5>Файл:</h5>
+                <a href="{{ submission.file_upload.url }}" class="btn btn-sm btn-outline-primary" target="_blank">Скачать файл</a>
+            {% endif %}
+            
+            <hr>
+            
+            <form method="post">
+                {% csrf_token %}
+                <div class="mb-3">
+                    {{ form.score.label_tag }}
+                    {{ form.score }}
+                    {% if form.score.errors %}<div class="text-danger">{{ form.score.errors }}</div>{% endif %}
+                </div>
+                <div class="mb-3">
+                    {{ form.comment.label_tag }}
+                    {{ form.comment }}
+                    {% if form.comment.errors %}<div class="text-danger">{{ form.comment.errors }}</div>{% endif %}
+                </div>
+                <button type="submit" class="btn btn-success">Сохранить оценку</button>
+                <a href="{% url 'dashboard:teacher_submissions_list' %}" class="btn btn-secondary">Отмена</a>
+            </form>
+        </div>
+    </div>
 </div>
 {% endblock %}
