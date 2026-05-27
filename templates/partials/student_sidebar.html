@@ -4,6 +4,12 @@
         <li><a href="{% url 'dashboard:student_dashboard' %}" class="{% if request.resolver_match.url_name == 'student_dashboard' %}active{% endif %}">
             <i class="fas fa-home"></i>Главная
         </a></li>
+        <li><a href="{% url 'dashboard:student_submissions' %}" class="{% if request.resolver_match.url_name == 'student_submissions' %}active{% endif %}">
+            <i class="fas fa-file-upload"></i>Мои работы
+        </a></li>
+        <li><a href="{% url 'dashboard:submit_assignment_select' %}" class="{% if request.resolver_match.url_name == 'submit_assignment_select' %}active{% endif %}">
+            <i class="fas fa-paper-plane"></i>Отправить работу
+        </a></li>
         <li><a href="{% url 'core:materials' %}" class="{% if request.resolver_match.url_name == 'materials' %}active{% endif %}">
             <i class="fas fa-book"></i>Учебные материалы
         </a></li>

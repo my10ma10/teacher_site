@@ -3,6 +3,7 @@ from . import views
 
 app_name = 'dashboard'
 
+
 urlpatterns = [
     path('teacher/', views.teacher_dashboard, name='teacher_dashboard'),
     path('teacher/create/', views.create_assignment, name='create_assignment'),
@@ -13,4 +14,6 @@ urlpatterns = [
     path('teacher/grade/<int:pk>/', views.grade_submission, name='grade_submission'),
     path('student/', views.student_dashboard, name='student_dashboard'),
     path('student/submit/<int:assignment_id>/', views.submit_solution, name='submit_solution'),
+    path('student/submissions/', views.student_submissions, name='student_submissions'),
+    path('student/submit-select/', views.submit_assignment_select, name='submit_assignment_select'),
 ]

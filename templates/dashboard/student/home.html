@@ -17,11 +17,14 @@
                 Оцененных работ: {{ graded.count }}
             </div>
         </div>
-        
+
         <h2>Мои задания</h2>
         <ul>
             {% for assignment in pending %}
-            <li>{{ assignment.title }} <span class="date">(до {{ assignment.deadline|date:"d.m" }})</span></li>
+            <li>{{ assignment.title }} 
+                <span class="date">
+                    (до {{ assignment.deadline|date:"H:i d.m.Y" }})
+                </span></li>
             {% empty %}
             <li>Нет заданий для выполнения</li>
             {% endfor %}

@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="dashboard-container">
+    {% include 'partials/student_sidebar.html' %}
+    <main>
+        <h1>Мои работы</h1>
+        
+        {% if submissions %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Задание</th>
+                    <th>Дата отправки</th>
+                    <th>Статус</th>
+                    <th>Оценка</th>
+                    <th>Комментарий учителя</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for submission in submissions %}
+                <tr>
+                    <td>{{ submission.assignment.title }}</td>
+                    <td>{{ submission.submitted_at|date:"d.m.Y H:i" }}</td>
+                    <td>
+                        {% if submission.status == 'sent' %}
+                            <span class="badge bg-warning">На проверке</span>
+                        {% elif submission.status == 'reviewed' %}
+                            <span class="badge bg-success">Проверено</span>
+                        {% else %}
+                            <span class="badge bg-secondary">{{ submission.get_status_display }}</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if submission.grade %}
+                            <strong>{{ submission.grade.score }}/{{ submission.assignment.max_score }}</strong>
+                        {% else %}
+                            —
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if submission.grade and submission.grade.comment %}
+                            {{ submission.grade.comment }}
+                        {% else %}
+                            —
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="alert alert-info">
+            Вы еще не отправили ни одной работы на проверку.
+        </div>
+        {% endif %}
+        
+        <a href="{% url 'dashboard:submit_assignment_select' %}" class="btn btn-primary mt-3">
+            <i class="fas fa-plus"></i> Отправить новую работу
+        </a>
+    </main>
+</div>
+{% endblock %}

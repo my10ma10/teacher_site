@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
+from django.utils import timezone
 from materials.models import Assignment, Submission, Grade
 from .forms import AssignmentForm, SubmissionForm, GradeForm
 from accounts.decorators import teacher_required, student_required
@@ -101,7 +102,37 @@ def submit_solution(request, assignment_id):
             submission.student = request.user
             submission.save()
             messages.success(request, 'Решение отправлено на проверку')
-            return redirect('dashboard:student_dashboard')
+            return redirect('dashboard:student_submissions')
     else:
         form = SubmissionForm()
     return render(request, 'dashboard/student/submit_solution.html', {'form': form, 'assignment': assignment})
+
+
+@student_required
+def submit_assignment_select(request):
+    """Страница выбора задания для отправки работы"""
+    my_class = request.user.class_group
+    assignments = Assignment.objects.filter(class_group=my_class, status='published').order_by('-deadline')
+    
+    # Получаем ID заданий, которые уже сданы студентом
+    submitted_ids = Submission.objects.filter(student=request.user).values_list('assignment_id', flat=True)
+    
+    # Фильтруем задания, которые еще не сданы
+    available = assignments.exclude(id__in=submitted_ids)
+    
+    return render(request, 'dashboard/student/submit_assignment_select.html', {
+        'available': available,
+        'submitted_count': submitted_ids.count()
+    })
+
+
+@student_required
+def student_submissions(request):
+    """Страница отображения всех работ студента с результатами проверок"""
+    submissions = Submission.objects.filter(
+        student=request.user
+    ).select_related('assignment', 'grade').order_by('-submitted_at')
+    
+    return render(request, 'dashboard/student/submissions.html', {
+        'submissions': submissions
+    })
