@@ -1,0 +1,11 @@
+<aside class="sidebar">
+    <h4><i class="fas fa-user-graduate me-2"></i>Ученик</h4>
+    <ul>
+        <li><a href="{% url 'dashboard:student_dashboard' %}" class="{% if request.resolver_match.url_name == 'student_dashboard' %}active{% endif %}">
+            <i class="fas fa-home"></i>Главная
+        </a></li>
+        <li><a href="{% url 'core:materials' %}" class="{% if request.resolver_match.url_name == 'materials' %}active{% endif %}">
+            <i class="fas fa-book"></i>Учебные материалы
+        </a></li>
+    </ul>
+</aside>
