@@ -17,7 +17,7 @@ class SubmissionForm(forms.ModelForm):
         model = Submission
         fields = ['code_text', 'file_upload']
         widgets = {
-            'code_text': forms.Textarea(attrs={'class': 'form-control font-monospace', 'rows': 10, 'placeholder': 'Вставьте код...'}),
+            'code_text': forms.Textarea(attrs={'class': 'form-control font-roboto', 'rows': 10, 'placeholder': 'Вставьте текст'}),
         }
 
 class GradeForm(forms.ModelForm):

@@ -6,12 +6,18 @@ class Assignment(models.Model):
     description = models.TextField()
     deadline = models.DateTimeField()
     max_score = models.PositiveSmallIntegerField(default=5)
+    teacher = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='assignments')
     class_group = models.ForeignKey(ClassGroup, on_delete=models.CASCADE)
     attachments = models.FileField(upload_to='assignments/', blank=True)
     status = models.CharField(max_length=10, default='published')
 
     def __str__(self):
         return self.title
+
+    class Meta:
+        verbose_name = 'Задание'
+        verbose_name_plural = 'Задания'
+        ordering = ['-deadline']
 
 class Submission(models.Model):
     assignment = models.ForeignKey(Assignment, on_delete=models.CASCADE)

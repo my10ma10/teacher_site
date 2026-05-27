@@ -7,9 +7,9 @@ from accounts.decorators import teacher_required, student_required
 
 @teacher_required
 def teacher_dashboard(request):
-    assignments = Assignment.objects.filter(class_group=request.user.class_group).order_by('-deadline')
+    assignments = Assignment.objects.filter(teacher=request.user).order_by('-deadline')
     pending = Submission.objects.filter(
-        assignment__class_group=request.user.class_group,
+        assignment__teacher=request.user,
         status='sent'
     ).count()
     return render(request, 'dashboard/teacher/home.html', {
@@ -23,7 +23,7 @@ def create_assignment(request):
         form = AssignmentForm(request.POST, request.FILES)
         if form.is_valid():
             assignment = form.save(commit=False)
-            assignment.class_group = request.user.class_group
+            assignment.teacher = request.user
             assignment.save()
             messages.success(request, 'Задание опубликовано')
             return redirect('dashboard:teacher_dashboard')
@@ -54,7 +54,7 @@ def delete_assignment(request, pk):
 @teacher_required
 def submission_list(request):
     submissions = Submission.objects.filter(
-        assignment__class_group=request.user.class_group,
+        assignment__teacher=request.user,
         status='sent'
     ).select_related('student', 'assignment').order_by('submitted_at')
     return render(request, 'dashboard/teacher/submissions.html', {'submissions': submissions})
