@@ -124,7 +124,7 @@
                         </div>
                         <div class="flex-grow-1 ms-3">
                             <h6>Адрес лицея</h6>
-                            <p class="mb-0">г. Москва, ул. Образцова, д. 8</p>
+                            <p class="mb-0">г. Майкоп, ул. Гоголя, д. 112</p>
                             <small class="text-muted">МБОУ Лицей №8</small>
                         </div>
                     </div>
@@ -177,15 +177,12 @@
                     <h5 class="mb-0"><i class="fas fa-map-marker-alt me-2"></i>Как добраться</h5>
                 </div>
                 <div class="card-body">
-                    <div class="map-placeholder bg-light p-4 text-center rounded mb-3">
-                        <i class="fas fa-map fa-3x text-muted mb-3"></i>
-                        <p class="mb-0">Карта расположения лицея</p>
-                    </div>
+                    <div id="yandex-map" style="width: 100%; height: 400px; margin-top: 20px;"></div>
+                    
                     <p class="small text-muted">
                         <strong>На общественном транспорте:</strong><br>
-                        • Метро "Достоевская" - 5 минут пешком<br>
-                        • Автобусы: 123, 456, 789<br>
-                        • Троллейбусы: 12, 34
+                        • Автобусы: 3a, 8a, 9a, 26a<br>
+                        • Троллейбусы: 6, 10
                     </p>
                 </div>
             </div>
@@ -382,6 +379,29 @@
                 localStorage.setItem('contactFormViewed', 'true');
             }, 1000);
         }
+        initMap();
     });
+
+    function initMap() {
+        var schoolCoords = [44.615432, 40.112206];
+
+        ymaps.ready(function() {
+            var myMap = new ymaps.Map("yandex-map", {
+                center: schoolCoords,
+                zoom: 16,
+                controls: ['zoomControl', 'fullscreenControl']
+            });
+
+            var myPlacemark = new ymaps.Placemark(schoolCoords, {
+                hintContent: 'ул. Гоголя, д. 112',
+                balloonContent: '<strong>МБОУ Лицей №8</strong><br>г. Майкоп, ул. Гоголя, д. 112<br>Часы работы: Пн-Пт 8:00-17:00'
+            }, {
+                preset: 'islands#schoolIcon'
+            });
+
+            myMap.geoObjects.add(myPlacemark);
+            myMap.behaviors.disable('scrollZoom');
+        });
+    }
 </script>
 {% endblock %}
