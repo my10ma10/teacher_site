@@ -1,42 +1,108 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}Проверка работы{% endblock %}
 
 {% block content %}
-<div class="container mt-4">
-    <h2>Проверка работы</h2>
-    <div class="card mb-3">
-        <div class="card-header">
-            Задание: {{ submission.assignment.title }} | Ученик: {{ submission.student.get_full_name }}
-        </div>
-        <div class="card-body">
+<div class="container-fluid py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-xl-10">
+            <!-- Заголовок -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="mb-0"><i class="fas fa-clipboard-check me-2"></i>Проверка работы</h2>
+                <a href="{% url 'dashboard:teacher_submissions_list' %}" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left me-1"></i>Назад к списку
+                </a>
+            </div>
+
+            <!-- Информация о работе -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0">Информация</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3 mb-md-0">
+                            <small class="text-muted d-block">Задание</small>
+                            <strong>{{ submission.assignment.title }}</strong>
+                        </div>
+                        <div class="col-md-6">
+                            <small class="text-muted d-block">Ученик</small>
+                            <strong>{{ submission.student.get_full_name }}</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Код работы -->
             {% if submission.code_text %}
-                <h5>Код:</h5>
-                <pre><code>{{ submission.code_text }}</code></pre>
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0"><i class="fas fa-code me-2"></i>Код</h5>
+                </div>
+                <div class="card-body">
+                    <pre class="bg-light p-3 rounded border"><code class="language-python">{{ submission.code_text }}</code></pre>
+                </div>
+            </div>
             {% endif %}
             
+            <!-- Файл работы -->
             {% if submission.file_upload %}
-                <h5>Файл:</h5>
-                <a href="{{ submission.file_upload.url }}" class="btn btn-sm btn-outline-primary" target="_blank">Скачать файл</a>
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0"><i class="fas fa-file me-2"></i>Прикреплённый файл</h5>
+                </div>
+                <div class="card-body">
+                    <a href="{{ submission.file_upload.url }}" class="btn btn-primary" target="_blank">
+                        <i class="fas fa-download me-2"></i>Скачать файл
+                    </a>
+                </div>
+            </div>
             {% endif %}
-            
-            <hr>
-            
-            <form method="post">
-                {% csrf_token %}
-                <div class="mb-3">
-                    {{ form.score.label_tag }}
-                    {{ form.score }}
-                    {% if form.score.errors %}<div class="text-danger">{{ form.score.errors }}</div>{% endif %}
+
+            <!-- Форма оценки -->
+            <div class="card shadow-sm">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0"><i class="fas fa-star me-2"></i>Оценка и комментарий</h5>
                 </div>
-                <div class="mb-3">
-                    {{ form.comment.label_tag }}
-                    {{ form.comment }}
-                    {% if form.comment.errors %}<div class="text-danger">{{ form.comment.errors }}</div>{% endif %}
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.score.id_for_label }}" class="form-label">
+                                    {{ form.score.label }}
+                                </label>
+                                {{ form.score }}
+                                {% if form.score.errors %}
+                                    <div class="invalid-feedback d-block">{{ form.score.errors }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="{{ form.comment.id_for_label }}" class="form-label">
+                                {{ form.comment.label }}
+                            </label>
+                            {{ form.comment }}
+                            {% if form.comment.errors %}
+                                <div class="invalid-feedback d-block">{{ form.comment.errors }}</div>
+                            {% endif %}
+                            <div class="form-text">Оставьте отзыв о работе ученика</div>
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-success">
+                                <i class="fas fa-save me-2"></i>Сохранить оценку
+                            </button>
+                            <a href="{% url 'dashboard:teacher_submissions_list' %}" class="btn btn-secondary">
+                                Отмена
+                            </a>
+                        </div>
+                    </form>
                 </div>
-                <button type="submit" class="btn btn-success">Сохранить оценку</button>
-                <a href="{% url 'dashboard:teacher_submissions_list' %}" class="btn btn-secondary">Отмена</a>
-            </form>
+            </div>
         </div>
     </div>
 </div>

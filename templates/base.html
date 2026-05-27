@@ -134,15 +134,6 @@
         </div>
     {% endif %}
 
-    <div class="layout">
-        {% if user.is_authenticated %}
-            {% if user.role == 'teacher' %}
-                {% include 'partials/teacher_sidebar.html' %}
-            {% elif user.role == 'student' %}
-                {% include 'partials/student_sidebar.html' %}
-            {% endif %}
-        {% endif %}
-
         <main class="content">
             {% block content %}{% endblock %}
         </main>
