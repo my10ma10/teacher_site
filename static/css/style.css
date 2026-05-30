@@ -81,6 +81,13 @@ body {
     bottom: 0;
     background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,0 L100,0 L100,100 Z" fill="rgba(255,255,255,0.05)"/></svg>');
     background-size: cover;
+    pointer-events: none;
+}
+
+/* Кнопки в hero-секции должны быть поверх декоративных элементов */
+.hero-section .btn {
+    position: relative;
+    z-index: 10;
 }
 
 /* Карточки */

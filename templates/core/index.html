@@ -10,11 +10,11 @@
                 <p class="lead mb-4 animate-slide-up">Иванова Анна Петровна</p>
                 <p class="mb-4 animate-slide-up">Здесь вы найдете полезные материалы, задания и актуальные новости для учащихся и их родителей.</p>
                 <div class="d-flex flex-wrap gap-3 animate-slide-up">
-                    <a href="{% url 'core:about' %}" class="btn btn-light btn-lg">Узнать больше</a>
-                    <button class="btn btn-outline-light btn-lg" data-bs-toggle="modal" data-bs-target="#feedbackModal">
+                    <a href="{% url 'core:about' %}" class="btn btn-light btn-lg" id="learnMoreBtn">Узнать больше</a>
+                    <button type="button" class="btn btn-outline-light btn-lg" id="writeToMeBtn">
                         <i class="fas fa-envelope me-2"></i>Написать мне
                     </button>
-                    <button class="btn btn-success btn-lg" onclick="toggleChat()">
+                    <button type="button" class="btn btn-success btn-lg" id="supportBtn">
                         <i class="fas fa-comments me-2"></i>Поддержка
                     </button>
                 </div>
@@ -185,9 +185,27 @@
 
 {% block extra_js %}
 <script>
-// Инициализация таймеров и счетчиков
+
 document.addEventListener('DOMContentLoaded', function() {
-    // Таймеры обратного отсчета
+    const writeToMeBtn = document.getElementById('writeToMeBtn');
+    if (writeToMeBtn) {
+        writeToMeBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            const feedbackModal = new bootstrap.Modal(document.getElementById('feedbackModal'));
+            feedbackModal.show();
+        });
+    }
+
+    const supportBtn = document.getElementById('supportBtn');
+    if (supportBtn && window.toggleChat) {
+        supportBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            window.toggleChat();
+        });
+    }
+
     const eventDates = [
         { id: 'timer1', date: new Date('2025-06-01') },
         { id: 'timer2', date: new Date('2025-05-25') }

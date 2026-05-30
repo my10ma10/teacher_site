@@ -71,6 +71,7 @@
 
 .animate-float {
     animation: float 3s ease-in-out infinite;
+    pointer-events: none;
 }
 
 .animate-pulse {
@@ -310,6 +311,7 @@
     border-radius: 2px;
     animation: typing 2s ease-in-out infinite;
     animation-delay: calc(var(--delay) * 0.5s);
+    pointer-events: none;
 }
 
 .code-line:nth-child(2) {
