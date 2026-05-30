@@ -4,68 +4,73 @@
 {% block title %}Работы на проверку{% endblock %}
 
 {% block content %}
-<div class="container-fluid py-4">
-    <div class="row mb-4">
-        <div class="col-12">
-            <h2 class="mb-3"><i class="fas fa-clipboard-check me-2"></i>Работы на проверку</h2>
-        </div>
-    </div>
+<div class="dashboard-container">
+    {% include 'partials/teacher_sidebar.html' %}
+    <main>
+        <div class="container-fluid py-4">
+            <div class="row mb-4">
+                <div class="col-12">
+                    <h2 class="mb-3"><i class="fas fa-clipboard-check me-2"></i>Работы на проверку</h2>
+                </div>
+            </div>
 
-    <div class="row">
-        <div class="col-12">
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-hover align-middle mb-0">
-                            <thead class="table-light">
-                                <tr>
-                                    <th><i class="fas fa-user me-1"></i>Ученик</th>
-                                    <th><i class="fas fa-book me-1"></i>Задание</th>
-                                    <th><i class="fas fa-clock me-1"></i>Дата сдачи</th>
-                                    <th class="text-end">Действие</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for s in submissions %}
-                                <tr>
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-2" 
-                                                 style="width: 35px; height: 35px; font-size: 14px;">
-                                                {{ s.student.get_full_name|first|upper }}
-                                            </div>
-                                            <span class="fw-semibold">{{ s.student.get_full_name }}</span>
-                                        </div>
-                                    </td>
-                                    <td>{{ s.assignment.title }}</td>
-                                    <td>
-                                        <small class="text-muted">
-                                            <i class="fas fa-calendar me-1"></i>{{ s.submitted_at|date:"d.m.Y" }}
-                                            <br>
-                                            <i class="fas fa-clock me-1"></i>{{ s.submitted_at|date:"H:i" }}
-                                        </small>
-                                    </td>
-                                    <td class="text-end">
-                                        <a href="{% url 'dashboard:grade_submission' s.pk %}" 
-                                           class="btn btn-sm btn-primary">
-                                            <i class="fas fa-check me-1"></i>Проверить
-                                        </a>
-                                    </td>
-                                </tr>
-                                {% empty %}
-                                <tr>
-                                    <td colspan="4" class="text-center text-muted py-5">
-                                        <i class="fas fa-clipboard-check fa-3x mb-3 opacity-50"></i>
-                                        <p class="mb-0">Нет работ на проверку</p>
-                                    </td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
+            <div class="row">
+                <div class="col-12">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover align-middle mb-0">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th><i class="fas fa-user me-1"></i>Ученик</th>
+                                            <th><i class="fas fa-book me-1"></i>Задание</th>
+                                            <th><i class="fas fa-clock me-1"></i>Дата сдачи</th>
+                                            <th class="text-end">Действие</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for s in submissions %}
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-2"
+                                                         style="width: 35px; height: 35px; font-size: 14px;">
+                                                        {{ s.student.get_full_name|first|upper }}
+                                                    </div>
+                                                    <span class="fw-semibold">{{ s.student.get_full_name }}</span>
+                                                </div>
+                                            </td>
+                                            <td>{{ s.assignment.title }}</td>
+                                            <td>
+                                                <small class="text-muted">
+                                                    <i class="fas fa-calendar me-1"></i>{{ s.submitted_at|date:"d.m.Y" }}
+                                                    <br>
+                                                    <i class="fas fa-clock me-1"></i>{{ s.submitted_at|date:"H:i" }}
+                                                </small>
+                                            </td>
+                                            <td class="text-end">
+                                                <a href="{% url 'dashboard:grade_submission' s.pk %}"
+                                                   class="btn btn-sm btn-primary">
+                                                    <i class="fas fa-check me-1"></i>Проверить
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        {% empty %}
+                                        <tr>
+                                            <td colspan="4" class="text-center text-muted py-5">
+                                                <i class="fas fa-clipboard-check fa-3x mb-3 opacity-50"></i>
+                                                <p class="mb-0">Нет работ на проверку</p>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </main>
 </div>
 {% endblock %}
