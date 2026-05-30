@@ -12,6 +12,7 @@ def teacher_dashboard(request):
         assignment__teacher=request.user,
         status='sent'
     ).count()
+
     return render(request, 'dashboard/teacher/home.html', {
         'assignments': assignments[:5],
         'stats': {'pending': pending, 'total': assignments.count()}
@@ -29,6 +30,9 @@ def create_assignment(request):
             return redirect('dashboard:teacher_dashboard')
     else:
         form = AssignmentForm()
+        if request.user.class_group:
+            form.fields['class_group'].initial = request.user.class_group
+            
     return render(request, 'dashboard/teacher/create_assignment.html', {'form': form})
 
 @teacher_required
@@ -41,6 +45,7 @@ def update_assignment(request, pk):
             return redirect('dashboard:teacher_submissions', pk=assignment.pk)
     else:
         form = AssignmentForm(instance=assignment)
+
     return render(request, 'dashboard/teacher/create_assignment.html', {'form': form, 'action': 'edit'})
 
 @teacher_required
@@ -49,6 +54,7 @@ def delete_assignment(request, pk):
     if request.method == 'POST':
         assignment.delete()
         return redirect('dashboard:teacher_dashboard')
+    
     return render(request, 'dashboard/teacher/delete_confirm.html', {'object': assignment})
 
 @teacher_required
@@ -57,6 +63,7 @@ def submission_list(request):
         assignment__teacher=request.user,
         status='sent'
     ).select_related('student', 'assignment').order_by('submitted_at')
+    
     return render(request, 'dashboard/teacher/submissions.html', {'submissions': submissions})
 
 @teacher_required
@@ -75,6 +82,7 @@ def grade_submission(request, pk):
             return redirect('dashboard:teacher_submissions')
     else:
         form = GradeForm()
+
     return render(request, 'dashboard/teacher/grade_submission.html', {'form': form, 'submission': submission})
 
 @student_required
@@ -105,6 +113,7 @@ def submit_solution(request, assignment_id):
             return redirect('dashboard:student_submissions')
     else:
         form = SubmissionForm()
+        
     return render(request, 'dashboard/student/submit_solution.html', {'form': form, 'assignment': assignment})
 
 

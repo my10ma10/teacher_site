@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+{% block title %}Создание задания{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    {% include 'partials/teacher_sidebar.html' %}
+    <main>
+        <div class="page-header">
+            <h1><i class="fas fa-plus-circle me-2"></i>Создание нового задания</h1>
+            <a href="{% url 'dashboard:teacher_dashboard' %}" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left me-1"></i>Назад к панели
+            </a>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label for="{{ form.title.id_for_label }}" class="form-label">
+                            Название задания <span class="text-danger">*</span>
+                        </label>
+                        {{ form.title }}
+                        {% if form.title.errors %}
+                            <div class="text-danger small mt-1">{{ form.title.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="{{ form.description.id_for_label }}" class="form-label">
+                            Описание <span class="text-danger">*</span>
+                        </label>
+                        {{ form.description }}
+                        {% if form.description.errors %}
+                            <div class="text-danger small mt-1">{{ form.description.errors }}</div>
+                        {% endif %}
+                        <div class="form-text">Укажите подробное задание для учеников</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="{{ form.class_group.id_for_label }}" class="form-label">
+                            Класс <span class="text-danger">*</span>
+                        </label>
+                        {{ form.class_group }}
+                        {% if form.class_group.errors %}
+                            <div class="text-danger small mt-1">{{ form.class_group.errors }}</div>
+                        {% endif %}
+                        <div class="form-text">Выберите класс, для которого предназначено задание</div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.deadline.id_for_label }}" class="form-label">
+                                Срок сдачи <span class="text-danger">*</span>
+                            </label>
+                            {{ form.deadline }}
+                            {% if form.deadline.errors %}
+                                <div class="text-danger small mt-1">{{ form.deadline.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.max_score.id_for_label }}" class="form-label">
+                                Максимальный балл <span class="text-danger">*</span>
+                            </label>
+                            {{ form.max_score }}
+                            {% if form.max_score.errors %}
+                                <div class="text-danger small mt-1">{{ form.max_score.errors }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="{{ form.attachments.id_for_label }}" class="form-label">
+                            Прикрепленные файлы
+                        </label>
+                        {{ form.attachments }}
+                        {% if form.attachments.errors %}
+                            <div class="text-danger small mt-1">{{ form.attachments.errors }}</div>
+                        {% endif %}
+                        <div class="form-text">Можно прикрепить файлы с материалами для задания</div>
+                    </div>
+
+                    <div class="d-flex gap-2 mt-4">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-check me-1"></i>Опубликовать задание
+                        </button>
+                        <a href="{% url 'dashboard:teacher_dashboard' %}" class="btn btn-secondary">
+                            <i class="fas fa-times me-1"></i>Отмена
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .dashboard-container {
+        display: flex;
+        min-height: calc(100vh - 200px);
+    }
+
+    .dashboard-container main {
+        flex: 1;
+        padding: 2rem;
+    }
+
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+    }
+
+    .card {
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .form-control, .form-select {
+        border-radius: 5px;
+    }
+
+    .form-control:focus, .form-select:focus {
+        border-color: #0d6efd;
+        box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+    }
+</style>
+{% endblock %}
