@@ -35,103 +35,50 @@
     <h1 class="text-center mb-5">Методкопилка</h1>
     
     <div class="row mb-4">
+        {% for material in materials %}
         <div class="col-md-4 mb-3">
             <div class="card material-card position-relative">
-                <span class="material-badge badge bg-primary">Презентация</span>
+                <span class="material-badge badge
+                    {% if material.material_type == 'presentation' %}bg-primary
+                    {% elif material.material_type == 'notes' %}bg-secondary
+                    {% elif material.material_type == 'task' %}bg-success
+                    {% elif material.material_type == 'video' %}bg-info
+                    {% elif material.material_type == 'link' %}bg-warning text-dark
+                    {% endif %}">
+                    {{ material.get_material_type_display }}
+                </span>
                 <div class="card-body">
-                    <h5 class="card-title">История развития вычислительной техники</h5>
-                    <p class="card-text">Презентация для 7-8 классов об истории компьютеров от абака до современных суперкомпьютеров.</p>
+                    <h5 class="card-title">{{ material.title }}</h5>
+                    <p class="card-text">{{ material.description|truncatewords:20 }}</p>
                     <div class="d-flex justify-content-between align-items-center">
-                        <small class="text-muted">15.12.2024 • 7-8 класс</small>
-                        <a href="#" class="btn btn-primary btn-sm download-btn">
-                            <i class="fas fa-download me-1"></i>Скачать
-                        </a>
+                        <small class="text-muted">
+                            {{ material.published_at|date:"d.m.Y" }}
+                            {% if material.class_group %}• {{ material.class_group.name }}{% endif %}
+                        </small>
+                        {% if material.file %}
+                            <a href="{{ material.file.url }}" download
+                            class="btn btn-primary btn-sm download-btn">
+                                <i class="fas fa-download me-1"></i>Скачать
+                            </a>
+                        {% elif material.external_url %}
+                            <a href="{{ material.external_url }}" target="_blank" rel="noopener"
+                            class="btn btn-info btn-sm download-btn">
+                                <i class="fas fa-external-link-alt me-1"></i>Открыть
+                            </a>
+                        {% else %}
+                            <span class="btn btn-secondary btn-sm disabled">Нет файла</span>
+                        {% endif %}
                     </div>
                 </div>
             </div>
         </div>
-        
-        <div class="col-md-4 mb-3">
-            <div class="card material-card position-relative">
-                <span class="material-badge badge bg-success">Практика</span>
-                <div class="card-body">
-                    <h5 class="card-title">Основы работы в Excel</h5>
-                    <p class="card-text">Практическая работа по созданию таблиц, использованию формул и построению диаграмм.</p>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <small class="text-muted">10.12.2024 • 8 класс</small>
-                        <a href="#" class="btn btn-success btn-sm download-btn">
-                            <i class="fas fa-download me-1"></i>Скачать
-                        </a>
-                    </div>
-                </div>
-            </div>
+        {% empty %}
+        <div class="col-12 text-center py-5">
+            <i class="fas fa-folder-open fa-4x text-muted mb-3"></i>
+            <h4>Материалов пока нет</h4>
+            <p class="text-muted">Учитель ещё не добавил учебные материалы</p>
         </div>
-        
-        <div class="col-md-4 mb-3">
-            <div class="card material-card position-relative">
-                <span class="material-badge badge bg-warning text-dark">Тест</span>
-                <div class="card-body">
-                    <h5 class="card-title">Тест по основам алгоритмизации</h5>
-                    <p class="card-text">Контрольный тест для 9 класса по темам "Алгоритмы", "Блок-схемы", "Основные конструкции".</p>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <small class="text-muted">05.12.2024 • 9 класс</small>
-                        <a href="#" class="btn btn-warning btn-sm download-btn">
-                            <i class="fas fa-download me-1"></i>Скачать
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row mb-4">
-        <div class="col-md-4 mb-3">
-            <div class="card material-card position-relative">
-                <span class="material-badge badge bg-info">Видео</span>
-                <div class="card-body">
-                    <h5 class="card-title">Создание сайта на HTML и CSS</h5>
-                    <p class="card-text">Видеоурок по созданию простого веб-сайта с нуля. От разметки до стилизации.</p>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <small class="text-muted">01.12.2024 • 9-10 класс</small>
-                        <a href="#" class="btn btn-info btn-sm download-btn">
-                            <i class="fas fa-play me-1"></i>Смотреть
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="col-md-4 mb-3">
-            <div class="card material-card position-relative">
-                <span class="material-badge badge bg-primary">Презентация</span>
-                <div class="card-body">
-                    <h5 class="card-title">Основы кибербезопасности</h5>
-                    <p class="card-text">Презентация о безопасности в интернете, защите персональных данных и паролей.</p>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <small class="text-muted">28.11.2024 • 7-11 класс</small>
-                        <a href="#" class="btn btn-primary btn-sm download-btn">
-                            <i class="fas fa-download me-1"></i>Скачать
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="col-md-4 mb-3">
-            <div class="card material-card position-relative">
-                <span class="material-badge badge bg-success">Практика</span>
-                <div class="card-body">
-                    <h5 class="card-title">Первая программа на Python</h5>
-                    <p class="card-text">Пошаговое руководство по установке Python и созданию первой программы "Hello, World!".</p>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <small class="text-muted">25.11.2024 • 9 класс</small>
-                        <a href="#" class="btn btn-success btn-sm download-btn">
-                            <i class="fas fa-download me-1"></i>Скачать
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
+        {% endfor %}
     </div>
 
     <div class="row">
