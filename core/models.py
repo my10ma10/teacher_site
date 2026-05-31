@@ -97,8 +97,16 @@ class Material(models.Model):
 
 
 class GalleryItem(models.Model):
+    CATEGORY_CHOICES = [
+        ('Уроки', 'Уроки'),
+        ('Мероприятия', 'Мероприятия'),
+        ('Олимпиады', 'Олимпиады'),
+        ('Проекты', 'Проекты'),
+        ('Другое', 'Другое'),
+    ]
     image = models.ImageField(upload_to='gallery/')
     caption = models.CharField(max_length=200, blank=True)
+    category = models.CharField(max_length=50, choices=CATEGORY_CHOICES, default='Другое')
     uploaded_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -108,7 +116,6 @@ class GalleryItem(models.Model):
 
     def __str__(self):
         return self.caption or f'Фото #{self.id}'
-
 
 class Feedback(models.Model):
     name = models.CharField(max_length=100)

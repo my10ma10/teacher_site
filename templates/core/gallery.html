@@ -127,35 +127,25 @@
         {% if gallery_items %}
             {% for item in gallery_items %}
             <div class="col-md-4 col-sm-6 gallery-col" data-category="{{ item.category }}">
-                <div class="gallery-item" onclick="openLightbox('{{ item.image.url }}', '{{ item.title }}', '{{ item.description }}')">
-                    <img src="{{ item.image.url }}" alt="{{ item.title }}">
+                <div class="gallery-item" onclick="openLightbox('{{ item.image.url }}', '{{ item.caption }}', '{{ item.uploaded_at|date:"d.m.Y" }}')">
+                    <img src="{{ item.image.url }}" alt="{{ item.caption }}">
                     <div class="gallery-overlay">
-                        <h5>{{ item.title }}</h5>
-                        <small>{{ item.date|date:"d.m.Y" }}</small>
+                        <h5>{{ item.caption|default:"Без названия" }}</h5>
+                        <small>
+                            <i class="fas fa-tag me-1"></i>{{ item.category }}
+                            &nbsp;•&nbsp;
+                            <i class="fas fa-calendar me-1"></i>{{ item.uploaded_at|date:"d.m.Y" }}
+                        </small>
                     </div>
                 </div>
             </div>
             {% endfor %}
         {% else %}
-            <!-- Заглушка, если галерея пуста (для демонстрации верстки) -->
-            <div class="col-md-4 col-sm-6 gallery-col" data-category="Уроки">
-                <div class="gallery-item" onclick="openLightbox('https://www.digitalavmagazine.com/wp-content/uploads/2025/04/InfoComm2025-Avixa.jpg', 'Пример урока', 'Описание')">
-                    <img src="https://www.digitalavmagazine.com/wp-content/uploads/2025/04/InfoComm2025-Avixa.jpg" alt="Пример">
-                    <div class="gallery-overlay">
-                        <h5>Пример урока</h5>
-                        <small>01.09.2024</small>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4 col-sm-6 gallery-col" data-category="Мероприятия">
-                <div class="gallery-item" onclick="openLightbox('https://avatars.mds.yandex.net/i?id=a0fec592ae1534efc4184f8cf35c0437_l-4590012-images-thumbs&n=13', 'Праздник', 'Описание')">
-                    <img src="https://avatars.mds.yandex.net/i?id=a0fec592ae1534efc4184f8cf35c0437_l-4590012-images-thumbs&n=13" alt="Праздник">
-                    <div class="gallery-overlay">
-                        <h5>Праздник знаний</h5>
-                        <small>01.09.2024</small>
-                    </div>
-                </div>
-            </div>
+        <div class="col-12 text-center py-5">
+            <i class="fas fa-images fa-4x text-muted mb-3"></i>
+            <h4>Галерея пуста</h4>
+            <p class="text-muted">Фотографии пока не добавлены</p>
+        </div>
         {% endif %}
     </div>
 
@@ -278,7 +268,7 @@
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-                <form id="addGalleryForm" action="#" method="POST" enctype="multipart/form-data">
+                <form id="addGalleryForm" action="{% url 'core:gallery' %}" method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class="mb-3">
                         <label for="galleryTitle" class="form-label">Название изображения *</label>

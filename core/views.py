@@ -60,9 +60,28 @@ class MaterialListView(ListView):
 class GalleryView(ListView):
     model = GalleryItem
     template_name = 'core/gallery.html'
-    context_object_name = 'images'
+    context_object_name = 'gallery_items'
     paginate_by = 20
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        print("DEBUG gallery_items count:", GalleryItem.objects.count())
+        print("DEBUG context keys:", context.keys())
+        print("DEBUG gallery_items in context:", context.get('gallery_items'))
+        return context
+
+    def post(self, request, *args, **kwargs):
+        if not request.user.is_authenticated or request.user.role != 'teacher':
+            from django.core.exceptions import PermissionDenied
+            raise PermissionDenied
+        image = request.FILES.get('image')
+        caption = request.POST.get('title', '')
+        category = request.POST.get('category', 'Другое')
+        if image:
+            GalleryItem.objects.create(image=image, caption=caption, category=category)
+            from django.contrib import messages
+            messages.success(request, 'Фото успешно добавлено в галерею')
+        return redirect('core:gallery')
 
 class ContactView(TemplateView):
     template_name = 'core/contacts.html'
