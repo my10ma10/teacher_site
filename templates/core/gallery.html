@@ -119,9 +119,6 @@
                 <i class="fas fa-plus me-2"></i>Добавить фото
             </button>
             {% endif %}
-            <button class="btn btn-outline-primary" onclick="downloadGallery()">
-                <i class="fas fa-download me-2"></i>Скачать все
-            </button>
         </div>
     </div>
 
@@ -142,8 +139,8 @@
         {% else %}
             <!-- Заглушка, если галерея пуста (для демонстрации верстки) -->
             <div class="col-md-4 col-sm-6 gallery-col" data-category="Уроки">
-                <div class="gallery-item" onclick="openLightbox('https://via.placeholder.com/600x400?text=Lesson+1', 'Пример урока', 'Описание')">
-                    <img src="https://via.placeholder.com/600x400?text=Lesson+1" alt="Пример">
+                <div class="gallery-item" onclick="openLightbox('https://www.digitalavmagazine.com/wp-content/uploads/2025/04/InfoComm2025-Avixa.jpg', 'Пример урока', 'Описание')">
+                    <img src="https://www.digitalavmagazine.com/wp-content/uploads/2025/04/InfoComm2025-Avixa.jpg" alt="Пример">
                     <div class="gallery-overlay">
                         <h5>Пример урока</h5>
                         <small>01.09.2024</small>
@@ -151,8 +148,8 @@
                 </div>
             </div>
             <div class="col-md-4 col-sm-6 gallery-col" data-category="Мероприятия">
-                <div class="gallery-item" onclick="openLightbox('https://via.placeholder.com/600x400?text=Event+1', 'Праздник', 'Описание')">
-                    <img src="https://via.placeholder.com/600x400?text=Event+1" alt="Праздник">
+                <div class="gallery-item" onclick="openLightbox('https://avatars.mds.yandex.net/i?id=a0fec592ae1534efc4184f8cf35c0437_l-4590012-images-thumbs&n=13', 'Праздник', 'Описание')">
+                    <img src="https://avatars.mds.yandex.net/i?id=a0fec592ae1534efc4184f8cf35c0437_l-4590012-images-thumbs&n=13" alt="Праздник">
                     <div class="gallery-overlay">
                         <h5>Праздник знаний</h5>
                         <small>01.09.2024</small>
@@ -202,7 +199,6 @@
             </div>
             {% endfor %}
         {% else %}
-            <!-- Заглушка для видео -->
             <div class="col-lg-6 mb-4">
                 <div class="card video-card">
                     <div class="card-body text-center">
@@ -215,12 +211,12 @@
                         </div>
                         <h5>Введение в программирование на Python</h5>
                         <p class="text-muted">Основные понятия и первая программа. Урок для 9 класса.</p>
-                        <div class="video-info">
+                        <!-- <div class="video-info">
                             <small class="text-muted">
                                 <i class="fas fa-clock me-1"></i>15:24 • 
                                 <i class="fas fa-eye me-1 ms-2"></i>1,247 просмотров
                             </small>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </div>
@@ -236,12 +232,12 @@
                         </div>
                         <h5>Создание веб-сайта на HTML/CSS</h5>
                         <p class="text-muted">Практический урок по созданию сайта с нуля. Для 8-9 классов.</p>
-                        <div class="video-info">
+                        <!-- <div class="video-info">
                             <small class="text-muted">
                                 <i class="fas fa-clock me-1"></i>22:10 • 
                                 <i class="fas fa-eye me-1 ms-2"></i>892 просмотра
-                            </small>
-                        </div>
+                            </small> 
+                        </div>  -->
                     </div>
                 </div>
             </div>
@@ -347,21 +343,36 @@
 <script>
     // Функции для галереи
     function openLightbox(src, title, description) {
-        document.getElementById('lightboxImage').src = src;
-        document.getElementById('imageModalTitle').textContent = title;
-        document.getElementById('imageModalDescription').textContent = description;
-        document.getElementById('downloadImageBtn').href = src;
-        
-        var myModal = new bootstrap.Modal(document.getElementById('imageModal'));
-        myModal.show();
-    }
+    document.getElementById('lightboxImage').src = src;
+    document.getElementById('imageModalTitle').textContent = title;
+    document.getElementById('imageModalDescription').textContent = description;
+
+    const downloadBtn = document.getElementById('downloadImageBtn');
+    downloadBtn.onclick = function(e) {
+        e.preventDefault();
+        fetch(src)
+            .then(res => res.blob())
+            .then(blob => {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = title.replace(/\s+/g, '_') + '.jpg';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            })
+            .catch(() => {
+                window.open(src, '_blank');
+            });
+    };
+
+    var myModal = new bootstrap.Modal(document.getElementById('imageModal'));
+    myModal.show();
+}
 
     function playVideo(videoId, title) {
-        document.getElementById('videoModalTitle').textContent = title;
-        document.getElementById('videoPlayer').src = 'https://www.youtube.com/embed/' + videoId + '?autoplay=1';
-        
-        var videoModal = new bootstrap.Modal(document.getElementById('videoModal'));
-        videoModal.show();
+        window.open('https://www.youtube.com/watch?v=' + videoId, '_blank');
     }
 
     // Закрытие модального окна видео останавливает воспроизведение
@@ -400,9 +411,5 @@
             });
         });
     });
-
-    function downloadGallery() {
-        alert('Функция скачивания всех изображений будет реализована через backend.');
-    }
 </script>
 {% endblock %}
