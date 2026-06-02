@@ -55,8 +55,12 @@ WSGI_APPLICATION = 'teacher_site.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'teacher_db',
+        'USER': 'teacher',
+        'PASSWORD': 'legend',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 
