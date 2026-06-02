@@ -128,7 +128,7 @@
     {% include 'partials/header.html' %}
 
     {% if messages %}
-        <div class="alerts container mt-3">
+        <div class="alerts container mt-3" id="dashboard-alerts">
             {% for msg in messages %}
                 <div class="alert alert-{% if msg.tags == 'error' %}danger{% else %}{{ msg.tags }}{% endif %} alert-dismissible fade show" role="alert">
                     {{ msg }}
@@ -151,6 +151,37 @@
     <script src="{% static 'js/main.js' %}"></script>
     <script src="{% static 'js/chat.js' %}"></script>
     <script src="{% static 'js/animations.js' %}"></script>
+    <script>
+        // Фикс для отображения сообщений поверх боковой панели в dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            const alerts = document.querySelector('.dashboard-container .alerts');
+            const mainContent = document.querySelector('.dashboard-container main');
+            
+            if (alerts && mainContent) {
+                // Добавляем отступ сверху чтобы сообщения не налезали на контент
+                const alertsHeight = alerts.offsetHeight;
+                if (alertsHeight > 0) {
+                    mainContent.style.paddingTop = (parseInt(window.getComputedStyle(mainContent).paddingTop) + alertsHeight + 20) + 'px';
+                }
+            }
+        });
+        
+        // Обновляем отступы при закрытии сообщений
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('btn-close') && e.target.closest('.alert')) {
+                setTimeout(function() {
+                    const alerts = document.querySelector('.dashboard-container .alerts');
+                    const mainContent = document.querySelector('.dashboard-container main');
+                    
+                    if (alerts && mainContent) {
+                        const alertsHeight = alerts.offsetHeight;
+                        mainContent.style.paddingTop = alertsHeight > 0 ? 
+                            (parseInt(window.getComputedStyle(mainContent).paddingTop) + 20) + 'px' : '30px';
+                    }
+                }, 100);
+            }
+        });
+    </script>
     {% block extra_js %}{% endblock %}
 </body>
 </html>

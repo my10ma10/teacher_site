@@ -13,9 +13,11 @@
         </div>
         
         <h2>Активные задания</h2>
-        <ul>
+        <ul style="max-height: 320px; overflow-y: auto; padding-left: 1.25rem;">
             {% for a in assignments %}
-            <li>{{ a.title }} <span class="date">(до {{ a.deadline|date:"d.m" }})</span></li>
+            <li>{{ a.title }} 
+                <span class="date">{{ a.class_group}} до {{ a.deadline|date:"d.m" }}</span>
+            </li>
             {% empty %}
             <li>Нет активных заданий</li>
             {% endfor %}

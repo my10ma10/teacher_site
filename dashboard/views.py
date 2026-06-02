@@ -8,13 +8,18 @@ from accounts.decorators import teacher_required, student_required
 @teacher_required
 def teacher_dashboard(request):
     assignments = Assignment.objects.filter(teacher=request.user).order_by('-deadline')
+    submissions = Submission.objects.filter(
+        assignment__teacher=request.user,
+        status='sent'
+    ).select_related('student', 'assignment').order_by('-submitted_at')[:5]
     pending = Submission.objects.filter(
         assignment__teacher=request.user,
         status='sent'
     ).count()
 
     return render(request, 'dashboard/teacher/home.html', {
-        'assignments': assignments[:5],
+        'assignments': assignments,
+        'submissions': submissions,
         'stats': {'pending': pending, 'total': assignments.count()}
     })
 

@@ -504,6 +504,7 @@ footer::before {
     padding: 30px;
     background-color: #f8f9fa;
     min-height: calc(100vh - 76px);
+    position: relative;
 }
 
 .dashboard-container main h1 {
@@ -578,6 +579,37 @@ footer::before {
     .dashboard-container main {
         margin-left: 0;
         padding: 20px;
+    }
+}
+
+/* Стили для сообщений в dashboard */
+.alerts {
+    position: fixed !important;
+    top: 80px !important;
+    left: 300px !important;
+    right: 20px !important;
+    z-index: 9999 !important;
+    margin: 0 !important;
+    max-width: calc(100% - 320px) !important;
+}
+
+.alert {
+    z-index: 1001;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    border: none;
+}
+
+/* Адаптивность для мобильных устройств */
+@media (max-width: 768px) {
+    .alerts {
+        margin-left: 0;
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+    
+    .alert {
+        border-radius: 8px;
     }
 }
 /* Список новостей */
