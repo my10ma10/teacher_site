@@ -1,6 +1,7 @@
 import os
 from django import forms
 from django.core.exceptions import ValidationError
+from django.utils import timezone
 from .models import Submission, Assignment
 
 ALLOWED_EXTENSIONS = ['py', 'pdf', 'docx', 'zip', 'txt']
@@ -30,6 +31,13 @@ class SubmissionForm(forms.ModelForm):
 
     def clean(self):
         cleaned_data = super().clean()
+        code_text = cleaned_data.get('code_text')
+        file_upload = cleaned_data.get('file_upload')
+        
+        # Проверяем, что хотя бы одно поле заполнено
+        if not code_text and not file_upload:
+            raise ValidationError("Вы должны заполнить хотя бы одно поле: текст кода или прикрепить файл.")
+        
         assignment_id = self.data.get('assignment_id')
         if assignment_id:
             try:

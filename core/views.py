@@ -28,6 +28,11 @@ class NewsListView(ListView):
         if category:
             qs = qs.filter(category=category)
         return qs
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        from accounts.models import ClassGroup
+        context["classes"] = ClassGroup.objects.all()
+        return context
 
 
 class NewsDetailView(DetailView):
@@ -47,6 +52,7 @@ class MaterialListView(ListView):
         q = self.request.GET.get('q')
         mtype = self.request.GET.get('type')
         tag = self.request.GET.get('tag')
+        class_id = self.request.GET.get('class')
         
         if q:
             qs = qs.filter(Q(title__icontains=q) | Q(description__icontains=q))
@@ -54,7 +60,14 @@ class MaterialListView(ListView):
             qs = qs.filter(material_type=mtype)
         if tag:
             qs = qs.filter(tags__icontains=tag)
+        if class_id:
+            qs = qs.filter(class_group_id=class_id)
         return qs
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        from accounts.models import ClassGroup
+        context["classes"] = ClassGroup.objects.all()
+        return context
 
 
 class GalleryView(ListView):
@@ -131,6 +144,11 @@ class ScheduleView(ListView):
         if class_id:
             qs = qs.filter(class_group_id=class_id)
         return qs
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        from accounts.models import ClassGroup
+        context["classes"] = ClassGroup.objects.all()
+        return context
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

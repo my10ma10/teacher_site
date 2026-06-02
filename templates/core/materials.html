@@ -88,40 +88,37 @@
                     <h5 class="mb-0"><i class="fas fa-filter me-2"></i>Фильтры материалов</h5>
                 </div>
                 <div class="card-body">
-                    <form id="filterForm">
+                    <form method="get" id="filterForm">
                         <div class="mb-3">
                             <label for="classFilter" class="form-label">Класс</label>
-                            <select class="form-select" id="classFilter">
-                                <option value="all">Все классы</option>
-                                <option value="7">7 класс</option>
-                                <option value="8">8 класс</option>
-                                <option value="9">9 класс</option>
-                                <option value="10">10 класс</option>
-                                <option value="11">11 класс</option>
+                            <select class="form-select" id="classFilter" name="class">
+                                <option value="">Все классы</option>
+                                {% for class in classes %}
+                                <option value="{{ class.id }}" {% if request.GET.class == class.id|stringformat:"s" %}selected{% endif %}>{{ class.name }}</option>
+                                {% endfor %}
                             </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="searchInput" class="form-label">Поиск</label>
+                            <input type="text" class="form-control" id="searchInput" name="q" placeholder="Поиск по названию или описанию..." value="{{ request.GET.q }}">
                         </div>
                         <div class="mb-3">
                             <label for="typeFilter" class="form-label">Тип материала</label>
-                            <select class="form-select" id="typeFilter">
-                                <option value="all">Все типы</option>
-                                <option value="presentation">Презентации</option>
-                                <option value="practice">Практические работы</option>
-                                <option value="test">Тесты</option>
-                                <option value="video">Видеоуроки</option>
+                            <select class="form-select" id="typeFilter" name="type">
+                                <option value="">Все типы</option>
+                                <option value="presentation" {% if request.GET.type == 'presentation' %}selected{% endif %}>Презентации</option>
+                                <option value="notes" {% if request.GET.type == 'notes' %}selected{% endif %}>Конспекты</option>
+                                <option value="video" {% if request.GET.type == 'video' %}selected{% endif %}>Видеоуроки</option>
+                                <option value="link" {% if request.GET.type == 'link' %}selected{% endif %}>Ссылки</option>
+                                <option value="task" {% if request.GET.type == 'task' %}selected{% endif %}>Практика</option>
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label for="subjectFilter" class="form-label">Тема</label>
-                            <select class="form-select" id="subjectFilter">
-                                <option value="all">Все темы</option>
-                                <option value="programming">Программирование</option>
-                                <option value="graphics">Компьютерная графика</option>
-                                <option value="web">Веб-разработка</option>
-                                <option value="security">Кибербезопасность</option>
-                                <option value="basics">Основы информатики</option>
-                            </select>
+                            <label for="tagFilter" class="form-label">Тема/Тег</label>
+                            <input type="text" class="form-control" id="tagFilter" name="tag" placeholder="Введите тему или тег..." value="{{ request.GET.tag }}">
                         </div>
                         <button type="submit" class="btn btn-primary w-100">Применить фильтры</button>
+                        <a href="{% url 'core:materials' %}" class="btn btn-outline-secondary w-100 mt-2">Сбросить фильтры</a>
                     </form>
                 </div>
             </div>
@@ -179,14 +176,10 @@
 
 {% block extra_js %}
 <script>
-    // Простой фильтр материалов (заглушка для демонстрации)
+    // Фильтр материалов теперь работает через обычную отправку формы GET-запросом
     document.getElementById('filterForm').addEventListener('submit', function(e) {
         e.preventDefault();
-        const classFilter = document.getElementById('classFilter').value;
-        const typeFilter = document.getElementById('typeFilter').value;
-        const subjectFilter = document.getElementById('subjectFilter').value;
-        
-        alert(`Фильтры применены:\nКласс: ${classFilter}\nТип: ${typeFilter}\nТема: ${subjectFilter}\n\nВ реальном проекте здесь будет AJAX-запрос или перезагрузка страницы с параметрами.`);
+        this.submit(); // Просто отправляем форму, она перезагрузит страницу с параметрами
     });
 </script>
 {% endblock %}

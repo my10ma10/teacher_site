@@ -19,6 +19,9 @@
                     <a class="nav-link {% if 'subject' in request.resolver_match.url_name %}active{% endif %}" href="{% url 'core:subject' %}">Информатика</a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link {% if request.resolver_match.url_name == 'schedule' %}active{% endif %}" href="{% url 'core:schedule' %}">Расписание</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link {% if request.resolver_match.url_name == 'materials' %}active{% endif %}" href="{% url 'core:materials' %}">Методкопилка</a>
                 </li>
                 <li class="nav-item">
